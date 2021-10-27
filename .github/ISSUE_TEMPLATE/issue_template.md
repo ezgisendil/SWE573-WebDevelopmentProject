@@ -9,7 +9,8 @@ Briefly describe your issue here.
 
 ## Steps to reproduce
 
-Please remember that with sample code it's easier to reproduce the bug and it's much faster to fix it.
+Please remember that with sample code it's easier to reproduce the bug and it's much faster to fix it. 
+
 Tell us how to reproduce this issue. Please provide a working demo, you can use [this template](https://plnkr.co/edit/XorWgI?p=preview&preview) as a base.
 
 ### Expected behavior
