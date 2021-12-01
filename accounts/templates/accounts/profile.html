@@ -27,6 +27,12 @@
         <div class="form-group">
         </div>
         </form>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Offer Applications</legend>
+            <a class="" href="{% url 'applied-offer-list' 'waiting' %}"> Waiting Offer Applications</a>     <br />
+            <a class="" href="{% url 'applied-offer-list' 'current' %}"> Accepted Offers Applications(Current)</a> <br />
+            <a class="" href="{% url 'applied-offer-list' 'finished' %}"> Completed Offers Applications</a>     <br />
+        </fieldset>
     </div>
 {% endblock content %}
 

@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Post, Event
+from .models import Post, Event, Offer
 
 # Register your models here.
 admin.site.register(Post)
 admin.site.register(Event)
+admin.site.register(Offer)
