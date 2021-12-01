@@ -1,0 +1,73 @@
+
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  
+            <small class="text-muted">{{ offer.date_posted | date:"F d, Y"}}</small>
+        </div>
+        <h2 class="article-title">{{ offer.title }}</h2>
+        <p class="article-content">{{ offer.location }}, {{ offer.date }}</p> 
+        <p class="article-content">{{ offer.content }}</p>
+        <p class="article-content">Timecredit: {{ offer.timecredit }}</p>
+        <p class="article-content">Current Participants: {{ offer.num_participants }}</p>
+        <p class="article-content">Maximum Participants: {{ offer.max_participants }}</p>
+        {% if offer.author == user %}
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-update' offer.id %}" type="submit">Update Offer</a>
+        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'offer-delete' offer.id %}" type="submit">Delete Offer</a>
+        {% elif user.is_authenticated and user in offer.waiting_participants.all %}
+        <p class="article-content" style="color: green">You have already applied for this service and your application is waiting.</p>
+        {% elif user.is_authenticated and user in offer.current_participants.all %}
+        <p class="article-content" style="color: green">You have already enrolled for this service. The author will be paid by timecredits after you submit your feedback.</p>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'feedback-create' offer.id %}" type="submit">Submit Feedback</a>
+        {% elif user.is_authenticated and user in offer.finished_participants.all %}
+        <p class="article-content" style="color: green">You already used this service and the service is now completed.</p>
+        {% elif user.is_authenticated and user.profile.timecredit < offer.timecredit %}
+        <p class="article-content" style="color: red">You need at least {{offer.timecredit}} timecredit, but you have {{user.profile.timecredit}} timecredit available.</p>
+        {% elif user.is_authenticated and user.profile.timecredit < offer.timecredit %}
+        <p class="article-content" style="color: red">This offer has already reached its limit and does not accept new applications.</p>
+        {% elif user.is_authenticated %}
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-apply' offer.id %}" type="submit">Apply</a>
+        {% else %}
+        <p class="article-content" style="color: red">You need to login to apply for a service.</p>
+        {% endif %}
+        {% if user == offer.author %}
+        <hr />
+            <h3>Participants</h3>
+            <hr />
+            <h5>Waiting Participants</h5>
+            {% for participant in offer.waiting_participants.all %}
+                <p class="article-content" style="color: darkorange; font-size:small">{{participant.username}}: <a style="color:darkgreen" href="{% url 'offer-action' offer.id 'accept' participant.id %}">Accept</a> / <a style="color: darkred" href="{% url 'offer-action' offer.id 'reject' participant.id %}">Reject</a>
+                </p>
+            {% empty %}
+            <p class="article-content" style="color: darkblue; font-size:small">There is no waiting participant yet.</p>
+            {% endfor %}
+            <hr />
+            <h5>Current Participants</h5>
+            {% for participant in offer.current_participants.all %}
+                <p class="article-content" style="color: darkorange; font-size:small">{{participant.username}}</p>
+            {% empty %}
+            <p class="article-content" style="color: darkblue; font-size:small">There is no current participant yet.</p>
+            {% endfor %}
+            <hr />
+            <h5>Finished Participants</h5>
+            {% for participant in offer.finished_participants.all %}
+                <p class="article-content" style="color: darkorange; font-size:small">{{participant.username}}</p>
+            {% empty %}
+            <p class="article-content" style="color: darkblue; font-size:small">There is no finished participant yet.</p>
+            {% endfor %}
+        {% endif %}
+        <hr />
+        <h3>Feedbacks</h3>
+        <hr />
+        {% for feedback in offer.feedbacks.all %}
+        <small> {{feedback.date_posted}}</small> 
+            <p class="article-content">  {{feedback.author}}: {{feedback.rating}}/5
+                {{feedback.content}}</p>
+            <hr />
+            {% empty %}
+            <p class="article-content" style="color: darkred; font-size:small">There is no feedback for this offer right now.</p>
+        {% endfor %}
+        <hr />
+    </div>
+</article>
