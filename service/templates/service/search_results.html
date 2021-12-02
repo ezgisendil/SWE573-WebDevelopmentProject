@@ -5,6 +5,8 @@
 
 {% for offer in offers %}
   {% include "service/base/offer_detail_base.html" %}
+{% empty %}
+<p class="article-content" style="color: darkred; font-size:small">There are no offers for this search query right now.</p>  
 {% endfor %}
 
 {% for post in posts %}
@@ -22,6 +24,8 @@
   </div>
 </div>
 </br>
+{% empty %}
+<p class="article-content" style="color: darkred; font-size:small">There are no posts for this search query right now.</p>
 {% endfor %}
 
 {% for event in events %}
@@ -41,6 +45,8 @@
       </div>
     </div>
   </article>
+  {% empty %}
+  <p class="article-content" style="color: darkred; font-size:small">There are no posts for this event query right now.</p>  
 {% endfor %}
 
 <!--Home Page Pagination-->

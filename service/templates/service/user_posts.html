@@ -4,11 +4,11 @@
 {% block content %}
     <div class="content-section">
         <div class="media">
-        <img class="rounded-circle account-img" src="{{ object.author.profile.image.url }}">
+        <img class="rounded-circle account-img" src="{{ author.profile.image.url }}">
         <div class="media-body">
-            <h3 class="account-heading">{{ post.author.profile.username }}</h3>
-            <p class="text-secondary">{{ post.author.profile.email }}</p>
-            <a class="" href="{% url 'update' %}">Update Profile</a>
+            <h3 class="account-heading">{{ author.username }}</h3>
+            <p class="text-secondary">{{ author.email }}</p>
+            <a class="" href="{% url 'message-detail' author.username %}">Send Private Message</a>
             <p class="text-secondary">following and followers </p>   
             
         </div>
@@ -18,9 +18,9 @@
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">ShortBio</legend>
-                <p class="text-secondary">{{post.author.profile.shortbio}}</p>
+                <p class="text-secondary">{{author.profile.shortbio}}</p>
                 <legend class="border-bottom mb-4">Interests</legend>
-                <p class="text-secondary">{{post.author.profile.interests}}</p>
+                <p class="text-secondary">{{author.profile.interests}}</p>
 
             </fieldset>
         <div class="form-group">
@@ -32,9 +32,14 @@
         
       </form>
       </br>
+
+      {% for offer in offers %}
+        {% include "service/base/offer_detail_base.html" %}
+      {% endfor %}    
+
       {% for post in posts %}
          <!-- <h1>{{ post.title }}</h1> 
-          <p> By {{ post.author }} on {{ post.date_posted }}</p> 
+          <p> By {{ author }} on {{ post.date_posted }}</p> 
           <p> {{ post.content }}</p>>-->
           
         <article class="media content-section">
@@ -53,7 +58,7 @@
 
       {% for event in events %}
           <!-- <h1>{{ post.title }}</h1> 
-          <p> By {{ post.author }} on {{ post.date_posted }}</p> 
+          <p> By {{ author }} on {{ post.date_posted }}</p> 
           <p> {{ post.content }}</p>>-->
         <article class="media content-section">
           <div class="media-body">

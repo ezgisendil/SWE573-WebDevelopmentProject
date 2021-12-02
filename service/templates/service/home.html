@@ -10,8 +10,7 @@
     <img class="card-img-top" src="{{ post.image.url }}" alt="image">
     <div class="card-body">
       <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
-      <p class="card-text"><small class="text-muted tab" >Location: {{ post.location }} Date: {{ post.date }}</small></p>
-      <p class="card-text"><small class="text-muted tab" >Location: {{ post.location }} Date: {{ post.date }}</small></p>
+      <p class="card-text"><small class="text-muted">Location: {{ post.location }}</small><small class="text-muted">Date: {{ post.date }}</small></p>
       <!-- <span id="dots">...</span><span id="more"></span>
       <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ post.content }}</p>

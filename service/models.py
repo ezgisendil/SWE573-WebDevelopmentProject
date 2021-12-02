@@ -35,7 +35,7 @@ class Offer(models.Model):
 
     def clean(self):
         if self.num_participants > self.max_participants:
-            raise ValidationError(_('Maximum number of participants cannot be less than number of current participants!'))
+            raise ValidationError(('Maximum number of participants cannot be less than number of current participants!'))
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -72,8 +72,8 @@
           </div>
 
           <div class="col-md-4">
-            <form class="form-inline">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="form-inline" action="{% url 'search-results' %}" method="get">
+              <input class="form-control mr-sm-2" type="search" id="q" name="q" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
             </form>
           </br>

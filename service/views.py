@@ -4,9 +4,10 @@ from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.views.generic.edit import FormView
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Post, Event, Offer, Feedback, Notification, Message
-from .forms import PostForm, EventForm, OfferForm, FeedbackForm, MessageForm
+from .forms import PostForm, EventForm, OfferForm, FeedbackForm, MessageForm, AdvancedSearchForm
 from django.db import IntegrityError, transaction
 
 # Create your views here.
@@ -223,6 +224,18 @@ class OfferCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user #author of the form
         return super().form_valid(form)  #validate the form
+
+class AdvancedSearchView(LoginRequiredMixin, FormView):
+    model = Offer
+    form_class = AdvancedSearchForm
+    template_name = 'service/advanced_search.html'  # <app> / <model>_<viewtype>.html
+
+    def form_valid(self, form):
+        from django.db.models import Q
+
+        is_valid = super().form_valid(form)
+        
+        return is_valid
 
 class FeedbackCreateView(LoginRequiredMixin, CreateView):
     model = Feedback

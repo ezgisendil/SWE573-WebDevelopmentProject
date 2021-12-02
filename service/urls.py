@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (SearchListView, FeedbackCreateView, HomeListView, NotificationListView, OfferCreateView, OfferDeleteView, OfferDetailView, OfferListView, OfferUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView,
-                    EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView, MessageListView, MessageCreateView)
+                    EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView, MessageListView, MessageCreateView, AdvancedSearchView)
 from . import views
 
 urlpatterns = [
@@ -30,6 +30,7 @@ urlpatterns = [
     path('notifications/', NotificationListView.as_view(), name= 'notifications-list'),
 
     path('search/results/', SearchListView.as_view(), name = 'search-results'),
+    path('search/', AdvancedSearchView.as_view(), name = 'search-advanced'),
 
     path('message/list/', MessageListView.as_view(), name = 'message-list'),
     path('message/<str:username>/', MessageCreateView.as_view(), name = 'message-detail'),

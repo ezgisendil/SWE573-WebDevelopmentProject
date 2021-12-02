@@ -11,6 +11,8 @@
             <p class="account-heading">{{user.username}}</p>
             <!-- <p class="text-secondary">{{user.email}}</p> -->
             <a class="" href="{% url 'update' %}">Update Profile</a> 
+            <a class="" href="{% url 'offer-list-user' user.username %}"> My Offers</a>
+            <p class="text-secondary">Current Timecredit: {{user.profile.timecredit}}</p>
             <p class="text-secondary">following and followers </p>   
         </div>
         
