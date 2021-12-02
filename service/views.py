@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -41,6 +42,20 @@ def search(request):
         return render(request, 'search.html', {})
 
 
+# Request Service
+#Home Page
+class HomeListView(ListView):
+
+    model = Post
+    template_name = 'service/home.html'  # <app> / <model>_<viewtype>.html
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeListView, self).get_context_data(**kwargs)
+        context['posts'] = Post.objects.order_by('-date_posted').order_by('-date_posted')
+        context['events'] = Event.objects.order_by('-date_posted').order_by('-date_posted')
+        context['offers'] = Offer.objects.order_by('-date_posted').order_by('-date_posted')
+        return context
+
 class SearchListView(ListView):
 
     model = Post
@@ -67,22 +82,6 @@ class SearchListView(ListView):
             context['posts'] = context['posts'].filter(query)
             context['events'] = context['events'].filter(query)
             context['offers'] = context['offers'].filter(query)
-
-
-        return context
-
-# Request Service
-#Home Page
-class HomeListView(ListView):
-
-    model = Post
-    template_name = 'service/home.html'  # <app> / <model>_<viewtype>.html
-
-    def get_context_data(self, **kwargs):
-        context = super(HomeListView, self).get_context_data(**kwargs)
-        context['posts'] = Post.objects.order_by('-date_posted').order_by('-date_posted')
-        context['events'] = Event.objects.order_by('-date_posted').order_by('-date_posted')
-        context['offers'] = Offer.objects.order_by('-date_posted').order_by('-date_posted')
         return context
 
 class PostListView(ListView):
