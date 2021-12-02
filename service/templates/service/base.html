@@ -42,7 +42,7 @@
                 <a class="nav-item nav-link" href="{% url 'service-about' %}">About</a>
                 {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
-                <a class="nav-item nav-link" href="#">Message</a>
+                <a class="nav-item nav-link" href="{% url 'message-list' %}">Message</a>
                 <a class="nav-item nav-link" href="{% url 'notifications-list' %}">Notification</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
                 <button class="btn"><i class="fa fa-bars"></i></button>

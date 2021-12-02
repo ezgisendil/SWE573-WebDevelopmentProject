@@ -5,8 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post, Event, Offer, Feedback, Notification
-from .forms import PostForm, EventForm, OfferForm, FeedbackForm
+from .models import Post, Event, Offer, Feedback, Notification, Message
+from .forms import PostForm, EventForm, OfferForm, FeedbackForm, MessageForm
 from django.db import IntegrityError, transaction
 
 # Create your views here.
@@ -246,6 +246,30 @@ class FeedbackCreateView(LoginRequiredMixin, CreateView):
 
         return response
 
+class MessageCreateView(LoginRequiredMixin, CreateView):
+    model = Message
+    #fields = ['title', 'content','location','date']
+    form_class = MessageForm
+    def form_valid(self, form):
+        from django.db.models import Q
+
+        form.instance.sender = self.request.user #author of the form
+        form.instance.receiver = User.objects.filter(username=self.kwargs.get("username")).first() #author of the form
+        return super().form_valid(form)  #validate the form
+    
+    def get_context_data(self, **kwargs):
+        other_user =  User.objects.filter(username=self.kwargs.get("username")).first()
+        print(self.request.user, other_user)
+        kwargs['private_messages'] = Message.objects.filter(
+            (Q(receiver=self.request.user) & Q(sender = other_user)) | 
+            (Q(sender=self.request.user) & Q(receiver = other_user))
+        ).order_by('-date_posted').order_by('-date_posted').all()
+        
+        kwargs['receiver'] = other_user
+        
+        return super(MessageCreateView, self).get_context_data(**kwargs)
+
+
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Offer
     fields = ['title', 'content','max_participants','timecredit','location','date']
@@ -307,6 +331,20 @@ class NotificationListView(LoginRequiredMixin, ListView):
         res = Notification.objects.filter(user=self.request.user).order_by('-date_posted').order_by('-date_posted').all()
 
         return res
+
+class MessageListView(LoginRequiredMixin, ListView):
+    model = Message
+    template_name = 'service/message_list.html'
+    context_object_name = 'users_list'
+    paginate_by = 5
+
+    def get_queryset(self):
+        res = Message.objects.filter(Q(sender=self.request.user) | Q(receiver=self.request.user)).order_by('-date_posted').order_by('-date_posted')
+
+        users_list = list(set(list(res.values_list("sender__username", flat=True)) + list(res.values_list("receiver__username", flat=True))))
+
+        users_list.remove(self.request.user.username)
+        return users_list
 
 def apply_offer(request, pk):
     offer = Offer.objects.filter(pk=pk).first()

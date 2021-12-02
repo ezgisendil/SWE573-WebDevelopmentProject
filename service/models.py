@@ -98,3 +98,13 @@ class Event(models.Model):
     def get_absolute_url(self):
         #redirect to its own detail page after being created
         return reverse('post-detail', kwargs={'pk':self.pk})
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
+    content = models.TextField(verbose_name='content')
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def get_absolute_url(self):
+        #redirect to its own detail page after being created
+        return reverse('message-detail', kwargs={'username': self.receiver.username})

@@ -1,7 +1,7 @@
 from django import forms
 from django import forms
 from django.forms.widgets import TimeInput, HiddenInput
-from .models import Post, Event, Feedback, Offer
+from .models import Post, Offer, Message, Event, Feedback
 
 
 #for request and event creation form - date-time widgets
@@ -43,3 +43,7 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ['content', 'rating']
 
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
