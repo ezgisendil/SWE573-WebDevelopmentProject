@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (FeedbackCreateView, HomeListView, NotificationListView, OfferCreateView, OfferDeleteView, OfferDetailView, OfferListView, OfferUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView,
+from .views import (SearchListView, FeedbackCreateView, HomeListView, NotificationListView, OfferCreateView, OfferDeleteView, OfferDetailView, OfferListView, OfferUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView,
                     EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView)
 from . import views
 
@@ -28,6 +28,8 @@ urlpatterns = [
     path('offer/<int:pk>/apply/', views.apply_offer, name = 'offer-apply'),
     path('offer/<int:pk>/<str:action>/<int:user_id>/', views.offer_action, name = 'offer-action'),
     path('notifications/', NotificationListView.as_view(), name= 'notifications-list'),
+
+    path('search/results/', SearchListView.as_view(), name = 'search-results'),
 
 ]
 

@@ -41,6 +41,36 @@ def search(request):
         return render(request, 'search.html', {})
 
 
+class SearchListView(ListView):
+
+    model = Post
+    template_name = 'service/search_results.html'  # <app> / <model>_<viewtype>.html
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchListView, self).get_context_data(**kwargs)
+        context['posts'] = Post.objects.order_by('-date_posted').order_by('-date_posted')
+        context['events'] = Event.objects.order_by('-date_posted').order_by('-date_posted')
+        context['offers'] = Offer.objects.order_by('-date_posted').order_by('-date_posted')
+
+        q = self.request.GET.get("q", None)
+
+        if q and len(q) > 0:
+            query = Q(title__contains=q) | Q(content__contains=q)
+            context['posts'] = context['posts'].filter(query)
+            context['events'] = context['events'].filter(query)
+            context['offers'] = context['offers'].filter(query)
+        
+        loc = self.request.GET.get("loc", None)
+
+        if loc and len(loc) > 0:
+            query = Q(location_contains=loc)
+            context['posts'] = context['posts'].filter(query)
+            context['events'] = context['events'].filter(query)
+            context['offers'] = context['offers'].filter(query)
+
+
+        return context
+
 # Request Service
 #Home Page
 class HomeListView(ListView):

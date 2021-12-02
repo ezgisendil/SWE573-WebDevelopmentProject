@@ -1,0 +1,105 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+
+
+{% for offer in offers %}
+  {% include "service/base/offer_detail_base.html" %}
+{% endfor %}
+
+{% for post in posts %}
+
+<div class="card-deck">
+  <div class="card">
+    <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap">
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ post.location }}</small><small class="text-muted">Date: {{ post.date }}</small></p>
+      <p class="card-text">{{ post.content }}</p>
+      <a href="{% url 'user-posts' post.author.username %}"><img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"></a> 
+      <small class="text-muted"> Posted by {{ post.author }} on {{ post.date_posted | date:"F d, Y"}}</small>
+    </div>
+  </div>
+</div>
+</br>
+{% endfor %}
+
+{% for event in events %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'user-events' event.author.username %}">{{ event.author }}</a>
+        <small class="text-muted" >{{ event.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h3><a class="article-title" href="{% url 'event-detail' post.id %}">{{ event.title }}</a></h3>
+      <p class="article-content">{{ event.location }}, {{ event.date }}</p> 
+      <p class="article-content">{{ event.content }}</p>
+      <div class="text-secondary">
+        <button class="btn btn-secondary btn-sm btn-lg" href="#">Join</button>
+      </div>
+    </div>
+  </article>
+{% endfor %}
+
+<!--Home Page Pagination-->
+{% if is_paginated %}
+
+  {% if page_obj.has_previous %}
+    <a class = "btn btn-outline-info mb-4" href="?page=1">First</a>
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+      <a class = "btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% elif num > page_obj.number|add:'-3' and num < 1page_obj.number|add:'3' %}  
+      <a class = "btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+  {% endif %}
+
+{% endif %}
+{% endblock content %}
+
+
+<!--
+{% block request %}
+{% for request in requests %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ request.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ request.author }}</a>
+        <small class="text-muted">{{ request.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h2><a class="article-title" href="{% url 'request-detail' post.id %}">{{ request.title }}</a></h2>
+      <p class="article-content">{{ request.content }}</p>
+    </div>
+  </article>
+{% endfor %}
+{% endblock request %}
+
+{% block event %}
+{% for event in events %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ event.author }}</a>
+        <small class="text-muted">{{ event.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h2><a class="article-title" href="{% url 'event-detail' post.id %}">{{ event.title }}</a></h2>
+      <p class="article-content">{{ event.content }}</p>
+    </div>
+  </article>
+{% endfor %}
+{% endblock event %}
+-->
