@@ -1,15 +1,32 @@
-FROM python:3
 
-ENV PYTHONUNBUFFERED=1
+# pull official base image
+FROM python:3.9.6-alpine
 
-RUN mkdir /ServiceSearchProject
+# set work directory
+WORKDIR /usr/src/app
 
-WORKDIR /ServiceSearchProject
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-ADD . /ServiceSearchProject/
+# install psycopg2 dependencies
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev
 
-COPY ./requirements.txt /ServiceSearchProject/requirements.txt
+RUN apk add zlib-dev jpeg-dev gcc musl-dev
 
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY . /ServiceSearchProject
+# copy entrypoint.sh
+COPY ./app/entrypoint.sh .
+RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+# copy project
+COPY . .
+
+# run entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
