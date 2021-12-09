@@ -35,7 +35,17 @@ class Offer(models.Model):
 
     def clean(self):
         if self.num_participants > self.max_participants:
-            raise ValidationError(('Maximum number of participants cannot be less than number of current participants!'))
+            raise ValidationError(_('Maximum number of participants cannot be less than number of current participants!'))
+
+    @property
+    def feedback_senders(self):
+
+        return list(self.feedbacks.values_list("sender__username", flat=True))
+
+    @property
+    def feedback_receivers(self):
+
+        return list(self.feedbacks.values_list("receiver__username", flat=True))
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -50,7 +60,8 @@ class Notification(models.Model):
     # OFFER_NEW_FEEDBACK
 
 class Feedback(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_feedbacks")
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_feedbacks")
     offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name="feedbacks")
     content = models.TextField(verbose_name='content')
     rating = models.PositiveSmallIntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)])

@@ -253,22 +253,36 @@ class FeedbackCreateView(LoginRequiredMixin, CreateView):
     #fields = ['title', 'content','location','date']
     form_class = FeedbackForm
     def form_valid(self, form):
-        form.instance.author = self.request.user #author of the form
+        form.instance.sender = self.request.user #author of the form
+
+        receiver = User.objects.filter(username=self.kwargs.get("receiver")).first()
+        form.instance.receiver = receiver
+
         offer = Offer.objects.filter(pk=self.kwargs.get('pk')).first()
         form.instance.offer = offer
         
         response = super().form_valid(form)  #validate the form
 
         with transaction.atomic():
-            offer.current_participants.remove(self.request.user)
-            offer.finished_participants.add(self.request.user)
-            offer.author.profile.timecredit += offer.timecredit
-            offer.author.profile.save()
+            if offer.author == receiver:
+                notification = Notification(user=offer.author, offer=offer, action="OFFER_NEW_FEEDBACK")
+                notification.save()
+            
+            if offer.feedbacks.filter(Q(sender=receiver) & Q(receiver=self.request.user)).exists():
+                participant = receiver if offer.author != receiver else self.request.user
+                offer.current_participants.remove(participant)
+                offer.finished_participants.add(participant)
+                offer.author.profile.timecredit += offer.timecredit
+                offer.author.profile.save()
 
-            notification = Notification(user=offer.author, offer=offer, action="OFFER_NEW_FEEDBACK")
-            notification.save()
 
         return response
+
+    def get_context_data(self, **kwargs):
+        context = super(FeedbackCreateView, self).get_context_data(**kwargs)
+        context["receiver"] = self.kwargs.get("receiver")
+
+        return context
 
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
