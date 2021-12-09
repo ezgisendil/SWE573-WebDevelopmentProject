@@ -2,6 +2,9 @@
 
 {% block content %}
 
+{% for offer in offers %}
+  {% include "service/base/offer_detail_base.html" %}
+{% endfor %}
 
 {% for post in posts %}
 
@@ -15,14 +18,14 @@
       <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ post.content }}</p>
       <a href="{% url 'user-posts' post.author.username %}"><img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"></a> 
-      <small class="text-muted"> Posted by {{ post.author }} on {{ post.date_posted | date:"F d, Y"}}</small>
+      <small class="text-muted">Posted by <a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>  on {{ post.date_posted | date:"F d, Y"}}</small>
     </div>
   </div>
 </div>
 </br>
 {% endfor %}
 
-<style>
+<!-- <style>
   .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
@@ -36,7 +39,7 @@
   .container {
     padding: 4px 16px;
   }
-  </style>
+  </style> -->
 
 
 {% for event in events %}

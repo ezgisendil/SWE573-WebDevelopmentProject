@@ -1,11 +1,11 @@
 from django.urls import path
 from .views import (SearchListView, FeedbackCreateView, HomeListView, NotificationListView, OfferCreateView, OfferDeleteView, OfferDetailView, OfferListView, OfferUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView,
-                    EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView, MessageListView, MessageCreateView, AdvancedSearchView)
+                    EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView, MessageListView, MessageCreateView, AdvancedSearchView, UserPostListViewFixed)
 from . import views
 
 urlpatterns = [
-    path('', PostListView.as_view(), name = 'service-home'), #views.home changed to postlistview
-    path('profile/<str:username>', UserPostListView.as_view(), name = 'user-posts'),
+    path('', HomeListView.as_view(), name = 'service-home'), #views.home changed to postlistview
+    path('profile/<str:username>', UserPostListViewFixed.as_view(), name = 'user-posts'),
     path('post/<int:pk>/', PostDetailView.as_view(), name = 'post-detail'),
     path('post/new/', PostCreateView.as_view(), name = 'post-create'),  
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name = 'post-update'),
@@ -16,7 +16,7 @@ urlpatterns = [
     path('event/new/', EventCreateView.as_view(), name = 'event-create'),  
     path('event/<int:pk>/update/', EventUpdateView.as_view(), name = 'event-update'),
     path('event/<int:pk>/delete/', EventDeleteView.as_view(), name = 'event-delete'),
-
+    
     path('offer/<int:pk>/', OfferDetailView.as_view(), name = 'offer-detail'),
     path('offer/list/', OfferListView.as_view(), name = 'offer-list'),
     path('offer/list/my/<str:filter>/', OfferListView.as_view(), name = 'applied-offer-list'),
@@ -34,7 +34,6 @@ urlpatterns = [
 
     path('message/list/', MessageListView.as_view(), name = 'message-list'),
     path('message/<str:username>/', MessageCreateView.as_view(), name = 'message-detail'),
-
 ]
 
 

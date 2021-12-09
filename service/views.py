@@ -71,18 +71,28 @@ class SearchListView(ListView):
         q = self.request.GET.get("q", None)
 
         if q and len(q) > 0:
-            query = Q(title__contains=q) | Q(content__contains=q)
+            query = Q(title__icontains=q) | Q(content__icontains=q)
             context['posts'] = context['posts'].filter(query)
             context['events'] = context['events'].filter(query)
             context['offers'] = context['offers'].filter(query)
         
         loc = self.request.GET.get("loc", None)
 
-        if loc and len(loc) > 0:
-            query = Q(location_contains=loc)
+        if loc and len(loc) > 0 and loc != "Hepsi":
+            query = Q(location__icontains=loc)
             context['posts'] = context['posts'].filter(query)
             context['events'] = context['events'].filter(query)
             context['offers'] = context['offers'].filter(query)
+        
+        from_date = self.request.GET.get("from_date", None)
+        to_date = self.request.GET.get("to_date", None)
+
+        if to_date and from_date:
+            query = Q(date__range=(from_date, to_date))
+            context['posts'] = context['posts'].filter(query)
+            context['events'] = context['events'].filter(query)
+            context['offers'] = context['offers'].filter(query)
+
         return context
 
 class PostListView(ListView):
@@ -152,6 +162,8 @@ class UserPostListViewFixed(ListView):
         context['posts'] = Post.objects.filter(author=user).order_by('-date_posted').order_by('-date_posted')
         context['events'] = Event.objects.filter(author=user).order_by('-date_posted').order_by('-date_posted')
         context['offers'] = Offer.objects.filter(author=user).order_by('-date_posted').order_by('-date_posted')
+        context['author'] = user
+        
         return context
 
 #Organize Event
@@ -211,7 +223,6 @@ class UserEventListView(ListView):
     def get_queryset(self):
         user = get_object_or_404(User, username=self.kwargs.get('username'))
         return Post.objects.filter(author=user).order_by('-date_posted').order_by('-date_posted')
-
 
 class OfferDetailView(DetailView):
     model = Offer
@@ -356,7 +367,8 @@ class MessageListView(LoginRequiredMixin, ListView):
 
         users_list = list(set(list(res.values_list("sender__username", flat=True)) + list(res.values_list("receiver__username", flat=True))))
 
-        users_list.remove(self.request.user.username)
+        if self.request.user.username in users_list:
+            users_list.remove(self.request.user.username)
         return users_list
 
 def apply_offer(request, pk):
