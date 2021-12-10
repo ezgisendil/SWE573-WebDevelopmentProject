@@ -6,10 +6,10 @@
         <div class="media">
         <img class="rounded-circle account-img" src="{{ author.profile.image.url }}">
         <div class="media-body">
-            <h3 class="account-heading">{{ author.username }}</h3>
-            <p class="text-secondary">{{ author.email }}</p>
+        </br><h3 class="account-heading">{{ author.username }}</h3>
+<!--             <p class="text-secondary">Contact: {{ author.email }}</p> -->
             <a class="" href="{% url 'message-detail' author.username %}">Send Private Message</a>
-            <p class="text-secondary">following and followers </p>   
+<!--             <p class="text-secondary">following and followers </p>   --> 
             
         </div>
         
@@ -34,7 +34,18 @@
       </br>
 
       {% for offer in offers %}
-        {% include "service/base/offer_detail_base.html" %}
+      <article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+            <small class="text-muted">{{ offer.date_posted | date:"F d, Y"}}</small>
+          </div>
+          <h3><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h3>
+          <p class="article-content">{{ offer.content }}</p>
+          <!-- <div class="text-secondary">
+            <button class="btn btn-secondary btn-sm btn-lg" href="#">Apply</button>
+          </div> -->
+        </div>
+      </article>
       {% endfor %}    
 
       {% for post in posts %}
