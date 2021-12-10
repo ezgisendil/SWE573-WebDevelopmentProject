@@ -187,8 +187,8 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    #fields = ['title', 'content','location','date']
-    form_class = EventForm
+    fields = ['image','title', 'content','location','date']
+    #form_class = EventForm
     
     def form_valid(self, form):
         form.instance.author = self.request.user #author of the form

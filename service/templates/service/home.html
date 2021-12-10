@@ -63,22 +63,37 @@
 
 
 {% for event in events %}
-  <article class="media content-section">
+<div class="card-deck">
+  <div class="card">
+<!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ event.location }}</small><small class="text-muted">Date: {{ event.date }}</small></p>
+      <!-- <span id="dots">...</span><span id="more"></span>
+      <button onclick="myFunction()" id="myBtn">...</button> -->
+      <p class="card-text">{{ event.content }}</p>
+      <a href="{% url 'user-posts' event.author.username %}"><img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}"></a> 
+      <small class="text-muted">Posted by <a href="{% url 'user-posts' event.author.username %}">{{ event.author }}</a>  on {{ event.date_posted | date:"F d, Y"}}</small>
+    </div>
+  </div>
+</div>
+</br>
+<!--   <article class="media content-section">
     <img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{% url 'user-events' event.author.username %}">{{ event.author }}</a>
+        <a class="mr-2" href="{% url 'user-posts' event.author.username %}">{{ event.author }}</a>
         <small class="text-muted" >{{ event.date_posted | date:"F d, Y"}}</small>
         
       </div>
-      <h3><a class="article-title" href="{% url 'event-detail' post.id %}">{{ event.title }}</a></h3>
+      <h3><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h3>
       <p class="article-content">{{ event.location }}, {{ event.date }}</p> 
       <p class="article-content">{{ event.content }}</p>
       <div class="text-secondary">
         <button class="btn btn-secondary btn-sm btn-lg" href="#">Join</button>
       </div>
     </div>
-  </article>
+  </article> -->
 {% endfor %}
 
 <!--Home Page Pagination-->

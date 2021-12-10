@@ -97,7 +97,7 @@ class Event(models.Model):
     title = models.CharField(max_length=100, verbose_name='title')
     content = models.TextField(verbose_name='content')
     location = models.CharField(max_length=100, verbose_name='location')
-    date = models.DateTimeField(default='20/12/2021')
+    date = models.DateField(default='20/12/2021')
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.ImageField(default='defaultpost.jpg', upload_to='post_pics')
@@ -108,7 +108,7 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         #redirect to its own detail page after being created
-        return reverse('post-detail', kwargs={'pk':self.pk})
+        return reverse('event-detail', kwargs={'pk':self.pk})
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")

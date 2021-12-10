@@ -68,15 +68,12 @@
       {% endfor %}
 
       {% for event in events %}
-          <!-- <h1>{{ post.title }}</h1> 
-          <p> By {{ author }} on {{ post.date_posted }}</p> 
-          <p> {{ post.content }}</p>>-->
         <article class="media content-section">
           <div class="media-body">
             <div class="article-metadata">
               <small class="text-muted">{{ event.date_posted | date:"F d, Y"}}</small>
             </div>
-            <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ event.title }}</a></h3>
+            <h3><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h3>
             <p class="article-content">{{ event.content }}</p>
             <div class="text-secondary">
               <button class="btn btn-secondary btn-sm btn-lg" href="#">Join</button>
