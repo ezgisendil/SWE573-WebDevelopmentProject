@@ -2,8 +2,28 @@
 
 {% block content %}
 
-{% for offer in offers %}
+<!-- {% for offer in offers %}
   {% include "service/base/offer_detail_base.html" %}
+{% endfor %} -->
+
+
+{% for offer in offers %}
+
+<div class="card-deck">
+  <div class="card">
+    <!-- <img class="card-img-top" src="{{ offer.image.url }}" alt="image"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ offer.location }}</small><small class="text-muted">Date: {{ offer.date }}</small></p>
+      <!-- <span id="dots">...</span><span id="more"></span>
+      <button onclick="myFunction()" id="myBtn">...</button> -->
+      <p class="card-text">{{ offer.content }}</p>
+      <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
+      <small class="text-muted">Offered by <a href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+    </div>
+  </div>
+</div>
+</br>
 {% endfor %}
 
 {% for post in posts %}
