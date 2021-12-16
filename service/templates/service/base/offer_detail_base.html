@@ -1,21 +1,22 @@
 
 <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}">
+<!--     <img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"> -->
     <div class="media-body">
-        <div class="article-metadata">
+<!--         <div class="article-metadata">
         {% if offer.author == user %}
             <a class="mr-2" href="/profile/">{{ offer.author }}</a>
         {% else %}
             <a class="mr-2" href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  
         {% endif %}
             <small class="text-muted">{{ offer.date_posted | date:"F d, Y"}}</small>
-        </div>
+        </div> -->
         <h2 class="article-title">{{ offer.title }}</h2>
-        <p class="article-content">{{ offer.location }}, {{ offer.date }}</p> 
-        <p class="article-content">{{ offer.content }}</p>
-        <p class="article-content">Timecredit: {{ offer.timecredit }}</p>
-        <p class="article-content">Current Participants: {{ offer.num_participants }}</p>
-        <p class="article-content">Maximum Participants: {{ offer.max_participants }}</p>
+<!--         <p class="article-content">{{ offer.location }}, {{ offer.date }}</p>  -->
+        <p class="article-content"> <small class="text-muted">Location: {{ offer.location }} &emsp; Date: {{ offer.date }}</small></p> 
+        <p class="article-content"><small class="text-muted">Timecredit: {{ offer.timecredit }} &emsp; Current Participants: {{ offer.num_participants }} / {{ offer.max_participants }}</small></p>
+        <p class="article-content">{{ offer.content }} </p>
+<!--         <p class="article-content">Current Participants: {{ offer.num_participants }} / {{ offer.max_participants }}</p> -->
+<!--         <p class="article-content">Maximum Participants: {{ offer.max_participants }}</p> -->
         {% if offer.author == user %}
         <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-update' offer.id %}" type="submit">Update Offer</a>
         <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'offer-delete' offer.id %}" type="submit">Delete Offer</a>
@@ -41,6 +42,17 @@
         {% endif %}
         {% if user == offer.author %}
         <hr />
+<!--         <div class="article-metadata">
+            {% if offer.author == user %}
+                <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
+                <small class="text-muted">Offered by <a href="/profile/">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+            {% else %}
+                <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
+                <small class="text-muted">Offered by <a href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+            {% endif %}
+            <p></p>
+            </div>  -->
+            <p></p>
             <h3>Participants</h3>
             <hr />
             <h5>Waiting Participants</h5>
@@ -66,6 +78,13 @@
             {% endfor %}
         {% endif %}
         <hr />
+        {% if user != offer.author %}
+        <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
+        <small class="text-muted">Offered by <a href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+        <p></p>
+        <hr />
+        <p></p>
+        {% endif %}
         <h3>Feedbacks</h3>
         <hr />
         {% for feedback in offer.feedbacks.all %}

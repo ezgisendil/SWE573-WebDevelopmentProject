@@ -2,24 +2,62 @@
 
 {% block content %}
 
-<!-- {% for offer in offers %}
-  {% include "service/base/offer_detail_base.html" %}
-{% endfor %} -->
-
-
 {% for offer in offers %}
+<!-- <div id="accordion">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn " data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <h5 class="card-title"><a class="article-title">{{ offer.title }}</a></h5> 
+          <p class="card-text"><small class="text-muted">Location: {{ offer.location }}</small><small class="text-muted">Date: {{ offer.date }}</small></p>
+          <p class="card-text">{{ offer.content }}</p>
+        </button>
+      </h5>
+    </div>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+      {% if offer.author == user %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-update' offer.id %}" type="submit">Update Offer</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'offer-delete' offer.id %}" type="submit">Delete Offer</a>
+      {% elif user.is_authenticated and user in offer.waiting_participants.all %}
+      <p class="article-content" style="color: green">You have already applied for this service and your application is waiting.</p>
+      {% elif user.is_authenticated and user in offer.current_participants.all %}
+      <p class="article-content" style="color: green">You have already enrolled for this service. The author will be paid by timecredits after you and the offerer submit the feedback.</p>
+      {% elif user.is_authenticated %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-apply' offer.id %}" type="submit">Apply</a>
+      {% else %}
+      <p class="article-content" style="color: red">You need to login to apply for a service.</p>
+      {% endif %}
+      </br>
+      <p></p>
+      <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
+      <small class="text-muted">Offered by <a href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+      </div>
+    </div>
+  </div>
+</div> -->
 
 <div class="card-deck">
   <div class="card">
     <!-- <img class="card-img-top" src="{{ offer.image.url }}" alt="image"> -->
     <div class="card-body">
       <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h5> 
-      <p class="card-text"><small class="text-muted">Location: {{ offer.location }}</small><small class="text-muted">Date: {{ offer.date }}</small></p>
+      <p class="card-text"><small class="text-muted">Location: {{ offer.location }} &emsp; Date: {{ offer.date }}</small></p>
       <!-- <span id="dots">...</span><span id="more"></span>
       <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ offer.content }}</p>
-      <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
-      <small class="text-muted">Offered by <a href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+      {% if offer.author == user %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-update' offer.id %}" type="submit">Update Offer</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'offer-delete' offer.id %}" type="submit">Delete Offer</a>
+      {% elif user.is_authenticated and user in offer.waiting_participants.all %}
+      <p class="article-content" style="color: green"><small>You have already applied for this service and your application is waiting.</small> </p>
+      {% elif user.is_authenticated and user in offer.current_participants.all %}
+      <p class="article-content" style="color: green"><small>You have already enrolled for this service. The author will be paid by timecredits after you and the offerer submit the feedback.</small></p>
+      {% elif user.is_authenticated %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-apply' offer.id %}" type="submit">Apply</a>
+      {% else %}
+      <p class="article-content" style="color: red">You need to login to apply for a service.</p>
+      {% endif %}
     </div>
   </div>
 </div>
@@ -33,12 +71,10 @@
 <!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
     <div class="card-body">
       <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
-      <p class="card-text"><small class="text-muted">Location: {{ post.location }}</small><small class="text-muted">Date: {{ post.date }}</small></p>
+      <p class="card-text"><small class="text-muted">Location: {{ post.location }} &emsp; Date: {{ post.date }}</small></p>
       <!-- <span id="dots">...</span><span id="more"></span>
       <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ post.content }}</p>
-      <a href="{% url 'user-posts' post.author.username %}"><img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"></a> 
-      <small class="text-muted">Posted by <a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>  on {{ post.date_posted | date:"F d, Y"}}</small>
     </div>
   </div>
 </div>
@@ -68,12 +104,10 @@
 <!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
     <div class="card-body">
       <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
-      <p class="card-text"><small class="text-muted">Location: {{ event.location }}</small><small class="text-muted">Date: {{ event.date }}</small></p>
+      <p class="card-text"><small class="text-muted">Location: {{ event.location }} &emsp; Date: {{ event.date }}</small></p>
       <!-- <span id="dots">...</span><span id="more"></span>
       <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ event.content }}</p>
-      <a href="{% url 'user-posts' event.author.username %}"><img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}"></a> 
-      <small class="text-muted">Posted by <a href="{% url 'user-posts' event.author.username %}">{{ event.author }}</a>  on {{ event.date_posted | date:"F d, Y"}}</small>
     </div>
   </div>
 </div>

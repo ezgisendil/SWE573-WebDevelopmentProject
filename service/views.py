@@ -102,6 +102,12 @@ class PostListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 4
 
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        res = Post.objects.filter(author__username=username).order_by('-date_posted').order_by('-date_posted').all()
+
+        return res
+
 class PostDetailView(DetailView):
     model = Post
 
@@ -173,6 +179,12 @@ class EventListView(ListView):
     context_object_name = 'events'
     ordering = ['-date_posted']
     paginate_by = 4
+
+    def get_queryset(self):
+        username = self.kwargs.get('username')
+        res = Event.objects.filter(author__username=username).order_by('-date_posted').order_by('-date_posted').all()
+
+        return res
 
 class EventDetailView(DetailView):
     model = Event

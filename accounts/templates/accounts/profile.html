@@ -14,8 +14,8 @@
 <!--             <a class="" href="{% url 'offer-list-user' user.username %}"> My Offers</a> -->
             <p class="text-secondary">Current Timecredit: {{user.profile.timecredit}}</p>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-list-user' user.username %}" type="submit">My Offers</a>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-list-user' user.username %}" type="submit">My Requests</a>
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-list-user' user.username %}" type="submit">My Events</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-list-user' user.username %}" type="submit">My Requests</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-list-user' user.username %}" type="submit">My Events</a>
  
         </div>
         
