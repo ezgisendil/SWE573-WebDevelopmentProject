@@ -12,7 +12,9 @@
             <!-- <p class="text-secondary">{{user.email}}</p> -->
             <a class="" href="{% url 'update' %}">Update Profile</a> 
 <!--             <a class="" href="{% url 'offer-list-user' user.username %}"> My Offers</a> -->
+            <p class="text-secondary">Total Timecredit: {{user.profile.timecredit|add:user.profile.timecredit_hold}}</p>
             <p class="text-secondary">Current Timecredit: {{user.profile.timecredit}}</p>
+            <p class="text-secondary">Timecredit on Hold: {{user.profile.timecredit_hold}}</p>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-list-user' user.username %}" type="submit">My Offers</a>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-list-user' user.username %}" type="submit">My Requests</a>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-list-user' user.username %}" type="submit">My Events</a>

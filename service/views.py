@@ -78,7 +78,7 @@ class SearchListView(ListView):
         
         loc = self.request.GET.get("loc", None)
 
-        if loc and len(loc) > 0 and loc != "Hepsi":
+        if loc and len(loc) > 0 and loc != "All":
             query = Q(location__icontains=loc)
             context['posts'] = context['posts'].filter(query)
             context['events'] = context['events'].filter(query)
@@ -287,6 +287,9 @@ class FeedbackCreateView(LoginRequiredMixin, CreateView):
                 offer.author.profile.timecredit += offer.timecredit
                 offer.author.profile.save()
 
+                participant.profile.timecredit_hold -= offer.timecredit
+                participant.profile.save()
+
 
         return response
 
@@ -413,6 +416,7 @@ def apply_offer(request, pk):
             offer.save()
 
             request.user.profile.timecredit -= offer.timecredit
+            request.user.profile.timecredit_hold += offer.timecredit
             request.user.profile.save()
 
             notification = Notification(user=offer.author, offer=offer, action="OFFER_NEW_APPLICATION")
@@ -443,6 +447,8 @@ def offer_action(request, pk, action, user_id):
             offer.save()
             
             user.profile.timecredit += offer.timecredit
+            user.profile.timecredit_hold -= offer.timecredit
+
             user.profile.save()
 
             notification = Notification(user=user, offer=offer, action="OFFER_APPLICATION_REJECTED")
