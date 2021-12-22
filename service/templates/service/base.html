@@ -30,6 +30,7 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav mr-auto">
                 <img src="{% static 'logo3.png' %}" width="30" height="30" alt="">
                 <a id='short' href="{% url 'service-home' %}">
@@ -44,13 +45,13 @@
                 <a class="nav-item nav-link" href="{% url 'message-list' %}">Message</a>
                 <a class="nav-item nav-link" href="{% url 'notifications-list' %}">Notification</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
-                <button class="btn"><i class="fa fa-bars"></i></button>
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
                 <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
               {% endif %}
 
               </div>
+            </div>
             </div>
           </div>
         </nav>
