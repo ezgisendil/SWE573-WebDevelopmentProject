@@ -25,7 +25,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ['image','title', 'content','location','date']
+        fields = ['image','title', 'content', 'max_participant', 'location','date']
         widgets = {
             'date': DateInput()
         }

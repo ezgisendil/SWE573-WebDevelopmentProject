@@ -47,18 +47,6 @@ class Offer(models.Model):
 
         return list(self.feedbacks.values_list("receiver__username", flat=True))
 
-class Notification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING)
-    action = models.CharField(max_length=100, verbose_name='action')
-    date_posted = models.DateTimeField(default=timezone.now)
-
-    # Actions:
-    # OFFER_APPLICATION_ACCEPTED
-    # OFFER_APPLICATION_REJECTED
-    # OFFER_NEW_APPLICATION
-    # OFFER_NEW_FEEDBACK
-
 class Feedback(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_feedbacks")
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_feedbacks")
@@ -103,12 +91,23 @@ class Event(models.Model):
     image = models.ImageField(default='defaultpost.jpg', upload_to='post_pics')
     duration = TimeField(null=True)
 
+    max_participant = models.PositiveIntegerField(default=3, validators=[MinValueValidator(1)])
+    num_participant = models.PositiveIntegerField(default=0)
+
+    finished_participant = models.ManyToManyField(User, related_name="finished_events")
+    current_participant = models.ManyToManyField(User, related_name="current_events")
+    waiting_participant = models.ManyToManyField(User, related_name="waiting_events")
+
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         #redirect to its own detail page after being created
         return reverse('event-detail', kwargs={'pk':self.pk})
+
+    def clean(self):
+        if self.num_participant > self.max_participant:
+            raise ValidationError(_('Maximum number of participants cannot be less than number of current participants!'))
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
@@ -119,3 +118,20 @@ class Message(models.Model):
     def get_absolute_url(self):
         #redirect to its own detail page after being created
         return reverse('message-detail', kwargs={'username': self.receiver.username})
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    offer = models.ForeignKey(Offer, null=True, on_delete=models.DO_NOTHING)
+    event = models.ForeignKey(Event, null=True, on_delete=models.DO_NOTHING)
+    action = models.CharField(max_length=100, verbose_name='action')
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    # Actions:
+    # OFFER_APPLICATION_ACCEPTED
+    # OFFER_APPLICATION_REJECTED
+    # OFFER_NEW_APPLICATION
+    # OFFER_NEW_FEEDBACK
+    # EVENT_APPLICATION_ACCEPTED
+    # EVENT_APPLICATION_REJECTED
+    # EVENT_NEW_APPLICATION
+    # EVENT_NEW_FEEDBACK

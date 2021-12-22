@@ -110,6 +110,7 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
+    context_object_name = 'post'
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -188,6 +189,7 @@ class EventListView(ListView):
 
 class EventDetailView(DetailView):
     model = Event
+    context_object_name = 'event'
 
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
@@ -455,3 +457,57 @@ def offer_action(request, pk, action, user_id):
             notification.save()
     
     return HttpResponseRedirect(offer.get_absolute_url())
+
+def apply_event(request, pk):
+    event = Event.objects.filter(pk=pk).first()
+
+    print(request.user)
+
+    if event is None:
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+
+    if not request.user in event.waiting_participant.all():
+        with transaction.atomic():
+            event.waiting_participant.add(request.user)
+
+            event.num_participant += 1
+            event.save()
+
+            request.user.profile.save()
+
+            notification = Notification(user=event.author, event=event, action="EVENT_NEW_APPLICATION")
+            notification.save()
+
+    return HttpResponseRedirect(event.get_absolute_url())
+
+def event_action(request, pk, action, user_id):
+    print(pk, action, user_id)
+
+    event = Event.objects.filter(pk=pk).first()
+    user = event.waiting_participant.filter(pk=user_id).first()
+
+    if (event is None) or (user is None) or not (action in ["accept", "reject"]):
+        return HttpResponseNotFound('<h1>Page not found</h1>')
+
+    with transaction.atomic():
+        if action == "accept":
+            event.waiting_participant.remove(user)
+            event.current_participant.add(user)
+
+            notification = Notification(user=user, event=event, action="EVENT_APPLICATION_ACCEPTED")
+            notification.save()
+        elif action == "reject":
+            event.waiting_participant.remove(user)
+            
+            event.num_participant -= 1
+            event.save()
+            
+            user.profile.timecredit += event.timecredit
+            user.profile.timecredit_hold -= event.timecredit
+
+            user.profile.save()
+
+            notification = Notification(user=user, event=event, action="EVENT_APPLICATION_REJECTED")
+            notification.save()
+    
+    return HttpResponseRedirect(event.get_absolute_url())

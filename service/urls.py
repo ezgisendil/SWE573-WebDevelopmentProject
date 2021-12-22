@@ -20,6 +20,8 @@ urlpatterns = [
     path('event/list/<str:username>/', EventListView.as_view(), name = 'event-list-user'),
     path('event/<int:pk>/update/', EventUpdateView.as_view(), name = 'event-update'),
     path('event/<int:pk>/delete/', EventDeleteView.as_view(), name = 'event-delete'),
+    path('event/<int:pk>/apply/', views.apply_event, name = 'event-apply'),
+    path('event/<int:pk>/<str:action>/<int:user_id>/', views.event_action, name = 'event-action'),
     
     path('offer/<int:pk>/', OfferDetailView.as_view(), name = 'offer-detail'),
     path('offer/list/', OfferListView.as_view(), name = 'offer-list'),

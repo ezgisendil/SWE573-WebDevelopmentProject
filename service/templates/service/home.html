@@ -108,6 +108,18 @@
       <!-- <span id="dots">...</span><span id="more"></span>
       <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ event.content }}</p>
+      {% if event.author == user %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' event.id %}" type="submit">Update Event</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' event.id %}" type="submit">Delete Event</a>
+      {% elif user.is_authenticated and user in event.waiting_participant.all %}
+      <p class="article-content" style="color: green"><small>You have already applied for this event and your application is waiting.</small> </p>
+      {% elif user.is_authenticated and user in event.current_participant.all %}
+      <p class="article-content" style="color: green"><small>You have already enrolled for this event.</small></p>
+      {% elif user.is_authenticated %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-apply' event.id %}" type="submit">Apply</a>
+      {% else %}
+      <p class="article-content" style="color: red">You need to login to apply for an event.</p>
+      {% endif %}
     </div>
   </div>
 </div>
