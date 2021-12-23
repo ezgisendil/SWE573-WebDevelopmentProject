@@ -1,0 +1,36 @@
+{% extends 'service/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="content-section">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Private Messages with {{receiver.username}}</legend>
+            
+        {% for pm in private_messages %}
+                <b>
+                    {% if pm.sender.username == user.username %}
+                        You
+                    {% else %}
+                        {{pm.sender.username}}
+                    {% endif %}
+                </b> <small class="text-muted">({{ pm.date_posted }})</small>: 
+                <p class="article-content">{{pm.content}}</p>
+                <hr />
+            {% empty %}
+                <p class="article-content" style="color: darkred; font-size:small">There are no messages. You can send a message via the form below.</p>
+        {% endfor %}
+        </fieldset>
+
+        <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+       <!--      <legend class="border-bottom mb-4">Send Private Message to {{receiver.username}}</legend> -->
+            {{ form | crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Send</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

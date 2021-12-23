@@ -13,7 +13,6 @@ then
 fi
 
 python manage.py flush --no-input
-python manage.py loaddata initialdata.json
 python manage.py migrate
 
 

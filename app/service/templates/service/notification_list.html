@@ -1,0 +1,71 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+
+{% for notification in notifications %}
+  <article class="media content-section">
+      <div class="media-body">
+        <small style="color: gray">{{notification.date_posted}}</small>  
+        {% if notification.action == 'OFFER_NEW_FEEDBACK' %}
+          Your offer titled "{{notification.offer.title}}" received a new feedback.
+          <br>
+          <small>To see the offer, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
+        {% elif notification.action == 'OFFER_NEW_APPLICATION' %}
+          Your offer titled "{{notification.offer.title}}" received new application.
+          <br>
+          <small>To see the offer, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
+        {% elif notification.action == 'OFFER_APPLICATION_ACCEPTED' %}
+          Your application to the offer titled "{{notification.offer.title}}" was accepted.
+          <br>
+          <small>To see the offer, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
+        {% elif notification.action == 'OFFER_APPLICATION_REJECTED' %}
+          Your application to the offer titled "{{notification.offer.title}}" was rejected.
+        {% endif %}
+        <br>
+        {% if notification.action == 'EVENT_NEW_FEEDBACK' %}
+          Your event titled "{{notification.event.title}}" received a new feedback.
+          <br>
+          <small>To see the event, Click <a href="{{notification.event.get_absolute_url}}">here</a>.</small>
+        {% elif notification.action == 'EVENT_NEW_APPLICATION' %}
+          Your event titled "{{notification.event.title}}" received new application.
+          <br>
+          <small>To see the event, Click <a href="{{notification.event.get_absolute_url}}">here</a>.</small>
+        {% elif notification.action == 'EVENT_APPLICATION_ACCEPTED' %}
+          Your application to the event titled "{{notification.event.title}}" was accepted.
+          <br>
+          <small>To see the event, Click <a href="{{notification.event.get_absolute_url}}">here</a>.</small>
+        {% elif notification.action == 'EVENT_APPLICATION_REJECTED' %}
+          Your application to the event titled "{{notification.event.title}}" was rejected.
+          <br>
+          <small>To see the event, Click <a href="{{notification.event.get_absolute_url}}">here</a>.</small>
+        {% endif %}
+      </div>
+  </article>
+{% empty %}
+<p class="article-content" style="color: darkred; font-size:small">There are no notifications yet.</p>
+{% endfor %}
+
+
+
+{% if is_paginated %}
+
+{% if page_obj.has_previous %}
+  <a class = "btn btn-outline-info mb-4" href="?page=1">First</a>
+  <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+{% endif %}
+
+{% for num in page_obj.paginator.page_range %}
+  {% if page_obj.number == num %}
+    <a class = "btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+  {% elif num > page_obj.number|add:'-3' and num < 1page_obj.number|add:'3' %}  
+    <a class = "btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+  {% endif %}
+{% endfor %}
+
+{% if page_obj.has_next %}
+  <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+  <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% endif %}
+
+{% endif %}
+{% endblock content %}

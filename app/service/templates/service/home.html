@@ -1,0 +1,204 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+
+{% for offer in offers %}
+<!-- <div id="accordion">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn " data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          <h5 class="card-title"><a class="article-title">{{ offer.title }}</a></h5> 
+          <p class="card-text"><small class="text-muted">Location: {{ offer.location }}</small><small class="text-muted">Date: {{ offer.date }}</small></p>
+          <p class="card-text">{{ offer.content }}</p>
+        </button>
+      </h5>
+    </div>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+      {% if offer.author == user %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-update' offer.id %}" type="submit">Update Offer</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'offer-delete' offer.id %}" type="submit">Delete Offer</a>
+      {% elif user.is_authenticated and user in offer.waiting_participants.all %}
+      <p class="article-content" style="color: green">You have already applied for this service and your application is waiting.</p>
+      {% elif user.is_authenticated and user in offer.current_participants.all %}
+      <p class="article-content" style="color: green">You have already enrolled for this service. The author will be paid by timecredits after you and the offerer submit the feedback.</p>
+      {% elif user.is_authenticated %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-apply' offer.id %}" type="submit">Apply</a>
+      {% else %}
+      <p class="article-content" style="color: red">You need to login to apply for a service.</p>
+      {% endif %}
+      </br>
+      <p></p>
+      <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
+      <small class="text-muted">Offered by <a href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<div class="card-deck">
+  <div class="card">
+    <!-- <img class="card-img-top" src="{{ offer.image.url }}" alt="image"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ offer.location }} &emsp; Date: {{ offer.date }}</small></p>
+      <!-- <span id="dots">...</span><span id="more"></span>
+      <button onclick="myFunction()" id="myBtn">...</button> -->
+      <p class="card-text">{{ offer.content }}</p>
+      {% if offer.author == user %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-update' offer.id %}" type="submit">Update Offer</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'offer-delete' offer.id %}" type="submit">Delete Offer</a>
+      {% elif user.is_authenticated and user in offer.waiting_participants.all %}
+      <p class="article-content" style="color: green"><small>You have already applied for this service and your application is waiting.</small> </p>
+      {% elif user.is_authenticated and user in offer.current_participants.all %}
+      <p class="article-content" style="color: green"><small>You have already enrolled for this service. The author will be paid by timecredits after you and the offerer submit the feedback.</small></p>
+      {% elif user.is_authenticated %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-apply' offer.id %}" type="submit">Apply</a>
+      {% else %}
+      <p class="article-content" style="color: red">You need to login to apply for a service.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+</br>
+{% endfor %}
+
+{% for post in posts %}
+
+<div class="card-deck">
+  <div class="card">
+<!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ post.location }} &emsp; Date: {{ post.date }}</small></p>
+      <!-- <span id="dots">...</span><span id="more"></span>
+      <button onclick="myFunction()" id="myBtn">...</button> -->
+      <p class="card-text">{{ post.content }}</p>
+    </div>
+  </div>
+</div>
+</br>
+{% endfor %}
+
+<!-- <style>
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 40%;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+  
+  .container {
+    padding: 4px 16px;
+  }
+  </style> -->
+
+
+{% for event in events %}
+<div class="card-deck">
+  <div class="card">
+<!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ event.location }} &emsp; Date: {{ event.date }}</small></p>
+      <!-- <span id="dots">...</span><span id="more"></span>
+      <button onclick="myFunction()" id="myBtn">...</button> -->
+      <p class="card-text">{{ event.content }}</p>
+      {% if event.author == user %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' event.id %}" type="submit">Update Event</a>
+      <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' event.id %}" type="submit">Delete Event</a>
+      {% elif user.is_authenticated and user in event.waiting_participant.all %}
+      <p class="article-content" style="color: green"><small>You have already applied for this event and your application is waiting.</small> </p>
+      {% elif user.is_authenticated and user in event.current_participant.all %}
+      <p class="article-content" style="color: green"><small>You have already enrolled for this event.</small></p>
+      {% elif user.is_authenticated %}
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-apply' event.id %}" type="submit">Apply</a>
+      {% else %}
+      <p class="article-content" style="color: red">You need to login to apply for an event.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+</br>
+<!--   <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'user-posts' event.author.username %}">{{ event.author }}</a>
+        <small class="text-muted" >{{ event.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h3><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h3>
+      <p class="article-content">{{ event.location }}, {{ event.date }}</p> 
+      <p class="article-content">{{ event.content }}</p>
+      <div class="text-secondary">
+        <button class="btn btn-secondary btn-sm btn-lg" href="#">Join</button>
+      </div>
+    </div>
+  </article> -->
+{% endfor %}
+
+<!--Home Page Pagination-->
+{% if is_paginated %}
+
+  {% if page_obj.has_previous %}
+    <a class = "btn btn-outline-info mb-4" href="?page=1">First</a>
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+      <a class = "btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% elif num > page_obj.number|add:'-3' and num < 1page_obj.number|add:'3' %}  
+      <a class = "btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+  {% endif %}
+
+{% endif %}
+{% endblock content %}
+
+
+<!--
+{% block request %}
+{% for request in requests %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ request.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ request.author }}</a>
+        <small class="text-muted">{{ request.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h2><a class="article-title" href="{% url 'request-detail' post.id %}">{{ request.title }}</a></h2>
+      <p class="article-content">{{ request.content }}</p>
+    </div>
+  </article>
+{% endfor %}
+{% endblock request %}
+
+{% block event %}
+{% for event in events %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ event.author }}</a>
+        <small class="text-muted">{{ event.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h2><a class="article-title" href="{% url 'event-detail' post.id %}">{{ event.title }}</a></h2>
+      <p class="article-content">{{ event.content }}</p>
+    </div>
+  </article>
+{% endfor %}
+{% endblock event %}
+-->

@@ -1,0 +1,124 @@
+{% extends 'service/base.html' %}
+
+{% block content %}
+
+
+{% for offer in offers %}
+<div class="card-deck">
+  <div class="card">
+    <!-- <img class="card-img-top" src="{{ offer.image.url }}" alt="image"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ offer.location }}</small><small class="text-muted">Date: {{ offer.date }}</small></p>
+      <!-- <span id="dots">...</span><span id="more"></span>
+      <button onclick="myFunction()" id="myBtn">...</button> -->
+      <p class="card-text">{{ offer.content }}</p>
+      <a href="{% url 'user-posts' offer.author.username %}"><img class="rounded-circle article-img" src="{{ offer.author.profile.image.url }}"></a> 
+      <small class="text-muted">Offered by <a href="{% url 'user-posts' offer.author.username %}">{{ offer.author }}</a>  on {{ offer.date_posted | date:"F d, Y"}}</small>
+    </div>
+  </div>
+</div>
+</br>
+{% empty %}
+<p class="article-content" style="color: darkred; font-size:small">There are no offers for this search query right now.</p>  
+{% endfor %}
+
+{% for post in posts %}
+
+<div class="card-deck">
+  <div class="card">
+<!--     <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ post.location }}</small><small class="text-muted">Date: {{ post.date }}</small></p>
+      <p class="card-text">{{ post.content }}</p>
+      <a href="{% url 'user-posts' post.author.username %}"><img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}"></a> 
+      <small class="text-muted"> Posted by {{ post.author }} on {{ post.date_posted | date:"F d, Y"}}</small>
+    </div>
+  </div>
+</div>
+</br>
+{% empty %}
+<p class="article-content" style="color: darkred; font-size:small">There are no posts for this search query right now.</p>
+{% endfor %}
+
+{% for event in events %}
+<div class="card-deck">
+  <div class="card">
+<!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
+      <p class="card-text"><small class="text-muted">Location: {{ event.location }}</small><small class="text-muted">Date: {{ event.date }}</small></p>
+      <!-- <span id="dots">...</span><span id="more"></span>
+      <button onclick="myFunction()" id="myBtn">...</button> -->
+      <p class="card-text">{{ event.content }}</p>
+      <a href="{% url 'user-posts' event.author.username %}"><img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}"></a> 
+      <small class="text-muted">Posted by <a href="{% url 'user-posts' event.author.username %}">{{ event.author }}</a>  on {{ event.date_posted | date:"F d, Y"}}</small>
+    </div>
+  </div>
+</div>
+</br>
+  {% empty %}
+  <p class="article-content" style="color: darkred; font-size:small">There are no posts for this event query right now.</p>  
+{% endfor %}
+
+<!--Home Page Pagination-->
+{% if is_paginated %}
+
+  {% if page_obj.has_previous %}
+    <a class = "btn btn-outline-info mb-4" href="?page=1">First</a>
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+      <a class = "btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% elif num > page_obj.number|add:'-3' and num < 1page_obj.number|add:'3' %}  
+      <a class = "btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+    <a class = "btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+  {% endif %}
+
+{% endif %}
+{% endblock content %}
+
+
+<!--
+{% block request %}
+{% for request in requests %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ request.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ request.author }}</a>
+        <small class="text-muted">{{ request.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h2><a class="article-title" href="{% url 'request-detail' post.id %}">{{ request.title }}</a></h2>
+      <p class="article-content">{{ request.content }}</p>
+    </div>
+  </article>
+{% endfor %}
+{% endblock request %}
+
+{% block event %}
+{% for event in events %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="#">{{ event.author }}</a>
+        <small class="text-muted">{{ event.date_posted | date:"F d, Y"}}</small>
+        
+      </div>
+      <h2><a class="article-title" href="{% url 'event-detail' post.id %}">{{ event.title }}</a></h2>
+      <p class="article-content">{{ event.content }}</p>
+    </div>
+  </article>
+{% endfor %}
+{% endblock event %}
+-->

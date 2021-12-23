@@ -1,0 +1,52 @@
+{% extends 'service/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<head><link rel="icon" type="image/png" href="static/logo3.png"></head>
+    <div class="content-section">
+        <div class="media">
+        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+            <br>
+            <p class="account-heading">{{user.username}}</p>
+            <!-- <p class="text-secondary">{{user.email}}</p> -->
+            <a class="" href="{% url 'update' %}">Update Profile</a> 
+<!--             <a class="" href="{% url 'offer-list-user' user.username %}"> My Offers</a> 
+            <p class="text-secondary">Total Timecredit: {{user.profile.timecredit|add:user.profile.timecredit_hold}}</p>
+            <p class="text-secondary">Current Timecredit: {{user.profile.timecredit}}</p>
+            <p class="text-secondary">Timecredit on Hold: {{user.profile.timecredit_hold}}</p>-->
+            <p class="text-secondary">Timecredit: {{user.profile.timecredit}} / {{user.profile.timecredit|add:user.profile.timecredit_hold}} Hold: {{user.profile.timecredit_hold}}</p>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-list-user' user.username %}" type="submit">My Offers</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-list-user' user.username %}" type="submit">My Requests</a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-list-user' user.username %}" type="submit">My Events</a>
+ 
+        </div>
+        
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">ShortBio</legend>
+                <p class="text-secondary">{{user.profile.shortbio}}</p>
+                <legend class="border-bottom mb-4">Interests</legend>
+                <p class="text-secondary">{{user.profile.interests}}</p>
+                
+            </fieldset>
+        <div class="form-group">
+        </div>
+        </form>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Offer Applications</legend>
+            <a class="" href="{% url 'applied-offer-list' 'waiting' %}"> Waiting Offer Applications</a>     <br />
+            <a class="" href="{% url 'applied-offer-list' 'current' %}"> Accepted Offers Applications(Current)</a> <br />
+            <a class="" href="{% url 'applied-offer-list' 'finished' %}"> Completed Offers Applications</a>     <br />
+        </fieldset>
+    </div>
+{% endblock content %}
+
+   <!-- Offers, Requests and Events will be added here.-->
+
+       <!-- <div class="form-group">
+            <button class="btn btn-outline-info" href="{% url 'user-posts' %}" type="submit">Offers, Requests and Events</button>
+        </div>-->
