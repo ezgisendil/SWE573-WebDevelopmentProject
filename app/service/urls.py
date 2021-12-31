@@ -1,11 +1,12 @@
 from django.urls import path
 from .views import (SearchListView, FeedbackCreateView, HomeListView, NotificationListView, OfferCreateView, OfferDeleteView, OfferDetailView, OfferListView, OfferUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView,
-                    EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView, MessageListView, MessageCreateView, AdvancedSearchView, UserPostListViewFixed)
+                    EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView, MessageListView, MessageCreateView, AdvancedSearchView, UserPostListViewFixed, follow)
 from . import views
 
 urlpatterns = [
     path('', HomeListView.as_view(), name = 'service-home'), #views.home changed to postlistview
     path('profile/<str:username>', UserPostListViewFixed.as_view(), name = 'user-posts'),
+
     path('post/<int:pk>/', PostDetailView.as_view(), name = 'post-detail'),
     path('post/list/', PostListView.as_view(), name = 'post-list'),
     path('post/list/<str:username>/', PostListView.as_view(), name = 'post-list-user'),
@@ -40,13 +41,6 @@ urlpatterns = [
 
     path('message/list/', MessageListView.as_view(), name = 'message-list'),
     path('message/<str:username>/', MessageCreateView.as_view(), name = 'message-detail'),
+
+    path('follow', follow, name='follow'),
 ]
-
-
-
-'''
-    path('request/<int:pk>/', RequestDetailView.as_view(), name = 'request-detail'),
-    path('request/new/', RequestCreateView.as_view(), name = 'request-create'),  
-    path('request/<int:pk>/update/', RequestUpdateView.as_view(), name = 'request-update'),
-    path('request/<int:pk>/delete/', RequestDeleteView.as_view(), name = 'request-delete'),
-'''

@@ -13,6 +13,8 @@ class Profile(models.Model):
     timecredit_hold = models.PositiveIntegerField(default=0)
     location = models.CharField(null=True, max_length=100, verbose_name='location')
     occupation = models.CharField(null=True, max_length=100, verbose_name='occupation')
+    following = models.ManyToManyField(User, related_name='following', blank=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -25,3 +27,6 @@ class Profile(models.Model):
             output_size = (300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+    
+    class Meta:
+        ordering = ('-created',)

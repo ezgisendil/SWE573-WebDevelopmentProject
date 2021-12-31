@@ -8,8 +8,24 @@
         <div class="media-body">
         </br><h3 class="account-heading">{{ author.username }}</h3>
 <!--             <p class="text-secondary">Contact: {{ author.email }}</p> -->
-            <p class="text-secondary">{{ author.profile.location }}</p>
-            <a class="" href="{% url 'message-detail' author.username %}">Send Private Message</a>
+          <p class="text-secondary">{{ author.profile.location }}</p>
+
+          {% if follow %}
+            <form action="{% url 'follow' %}" method="POST">
+              {% csrf_token %}
+              <input type="hidden" name="profile_user" value={{author.pk}}>
+              <button type="submit" class="btn btn-outline-secondary btn-sm">Unfollow</button>
+            </form>
+          {% else %}
+          <form action="{% url 'follow' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="profile_user" value={{author.pk}}>
+            <button type="submit" class="btn btn-outline-secondary btn-sm">Follow</button>
+          </form>
+          {% endif %}
+
+
+          <a class="" href="{% url 'message-detail' author.username %}">Send Private Message</a>
 <!--             <p class="text-secondary">following and followers </p>   --> 
             
         </div>
@@ -22,6 +38,8 @@
                 <p class="text-secondary">{{author.profile.shortbio}}</p>
                 <legend class="border-bottom mb-4">Interests</legend>
                 <p class="text-secondary">{{author.profile.interests}}</p>
+                <br>
+                {{follow}}
 
             </fieldset>
         <div class="form-group">

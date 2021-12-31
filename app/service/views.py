@@ -1,5 +1,5 @@
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http.response import HttpResponseNotFound, HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponse
@@ -9,6 +9,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Post, Event, Offer, Feedback, Notification, Message
 from .forms import PostForm, EventForm, OfferForm, FeedbackForm, MessageForm, AdvancedSearchForm
 from django.db import IntegrityError, transaction
+from accounts.models import Profile
 
 # Create your views here.
 # dummy data to create posts
@@ -165,13 +166,37 @@ class UserPostListViewFixed(ListView):
     def get_context_data(self, **kwargs):
         context = super(UserPostListViewFixed, self).get_context_data(**kwargs)
         user = get_object_or_404(User, username=self.kwargs.get('username'))
+        my_profile = Profile.objects.get(user=self.request.user)
 
+        if user in my_profile.following.all():
+            follow = True
+        else:
+            follow = False
+
+        context['follow'] = follow
         context['posts'] = Post.objects.filter(author=user).order_by('-date_posted').order_by('-date_posted')
         context['events'] = Event.objects.filter(author=user).order_by('-date_posted').order_by('-date_posted')
         context['offers'] = Offer.objects.filter(author=user).order_by('-date_posted').order_by('-date_posted')
         context['author'] = user
         
         return context
+
+def follow(request):
+    if request.method=="POST":
+        my_profile = Profile.objects.get(user=request.user)
+        print(my_profile)
+        pk = request.POST.get('profile_user')
+        print(pk)
+        obj = Profile.objects.get(pk=pk)
+        print(obj)
+
+        if obj.user in my_profile.following.all():
+            my_profile.following.remove(obj.user)
+        else:
+            my_profile.following.add(obj.user)
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect('user-posts')
+
 
 #Organize Event
 class EventListView(ListView):
