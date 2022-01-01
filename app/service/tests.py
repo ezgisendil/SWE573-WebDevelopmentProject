@@ -29,7 +29,9 @@ class OfferTest(TestCase):
         Offer.objects.create(title='yoga class',
                             content='online training',
                             location='Online',
-                            date='2022-01-10',
+                            date='2022-01-11',
+                            time='09:00',
+                            duration='2',
                             author=self.newuser,
                             max_participants='3',
                             timecredit='1',
@@ -42,6 +44,7 @@ class OfferTest(TestCase):
         self.assertEqual(offer.title, 'yoga class')
         self.assertEqual(offer.content, 'online training')
         self.assertEqual(offer.location, 'Online')
+        self.assertEqual(offer.duration, 2),               
         self.assertEqual(offer.author, self.newuser)
         self.assertEqual(offer.max_participants, 3)
         self.assertEqual(offer.timecredit, 1)
@@ -70,11 +73,14 @@ class RequestTest(TestCase):
                                     location='Istanbul',
                                     date='2022-01-17',
                                     author=self.newuser,
-                                    duration='10:00')
+                                    time='09:00',
+                                    duration='1')
         self.assertEqual(request.title, 'Car Wash')
         self.assertEqual(request.content, 'Professional car wash')
         self.assertEqual(request.location, 'Istanbul')
         self.assertEqual(request.date, '2022-01-17')
+        self.assertEqual(request.time, '09:00')
+        self.assertEqual(request.duration, '1')
 
 class EventTest(TestCase):
 
@@ -88,13 +94,16 @@ class EventTest(TestCase):
                                     location='Ankara',
                                     date='2022-01-29',
                                     author=self.newuser,
-                                    duration='10:00')
+                                    time='10:00',
+                                    duration='3')
 
         self.assertEqual(event.title, 'Coffee break')
         self.assertEqual(event.content, 'a coffee break with pet owners')
         self.assertEqual(event.max_participant, 3)
         self.assertEqual(event.location, 'Ankara')
         self.assertEqual(event.date, '2022-01-29')
+        self.assertEqual(event.time, '10:00')
+        self.assertEqual(event.duration, '3')
 
 
 
