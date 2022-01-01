@@ -19,14 +19,18 @@ class UserRegisterForm(UserCreationForm):
 
 #update username, email and shortbio
 class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
     class Meta:
-        model = Profile
-        fields = ['location', 'occupation', 'shortbio', 'interests']
+        model = User
+        fields = ['email']
 
 #update profile picture
 class ProfileUpdateForm(forms.ModelForm):
+    location = forms.CharField()
+    shortbio = forms.TextInput()
+    interests = forms.CharField()
     class Meta:
         model = Profile
-        fields = ['image']
+        fields = ['location', 'occupation', 'shortbio', 'interests', 'image']
 
 
