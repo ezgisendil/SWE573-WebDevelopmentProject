@@ -10,6 +10,7 @@ from .models import Post, Event, Offer, Feedback, Notification, Message
 from .forms import PostForm, EventForm, OfferForm, FeedbackForm, MessageForm, AdvancedSearchForm
 from django.db import IntegrityError, transaction
 from accounts.models import Profile
+from itertools import chain
 
 # Create your views here.
 # dummy data to create posts
@@ -48,15 +49,36 @@ def search(request):
 #Home Page
 class HomeListView(ListView):
 
-    model = Post
     template_name = 'service/home.html'  # <app> / <model>_<viewtype>.html
+    context_object_name = 'items'
+    ordering = ['-date_posted']
+    paginate_by = 6
 
-    def get_context_data(self, **kwargs):
-        context = super(HomeListView, self).get_context_data(**kwargs)
-        context['posts'] = Post.objects.order_by('-date_posted').order_by('-date_posted')
-        context['events'] = Event.objects.order_by('-date_posted').order_by('-date_posted')
-        context['offers'] = Offer.objects.order_by('-date_posted').order_by('-date_posted')
-        return context
+    def get_queryset(self):
+        posts = Post.objects.order_by('-date_posted').order_by('-date_posted')
+        events = Event.objects.order_by('-date_posted').order_by('-date_posted')
+        offers = Offer.objects.order_by('-date_posted').order_by('-date_posted')
+
+        res = sorted(
+            chain(posts, events, offers),
+            key=lambda instance: instance.date_posted, reverse=True)
+
+        return res
+
+    # def following_user_posts(request):
+    #     profile = Profile.objects.get(user=request.user)
+    #     users = [user for user in profile.following.all()]
+    #     following_posts = []
+    #     qs = None
+    #     for u in users:
+    #         offer = Offer.objects.filter(author=u)
+    #         post = Post.objects.filter(author=u)
+    #         event = Event.objects.filter(author=u)
+    #         following_posts.append(offer)
+    #         following_posts.append(post)
+    #         following_posts.append(event)   
+    #     return render(request, 'service/home.html', {'following_posts':following_posts})
+
 
 class SearchListView(ListView):
 

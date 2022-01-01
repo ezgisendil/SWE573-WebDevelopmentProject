@@ -48,6 +48,9 @@ class Offer(models.Model):
     def feedback_receivers(self):
 
         return list(self.feedbacks.values_list("receiver__username", flat=True))
+    
+    def get_type(self):
+        return "offer"
 
 class Feedback(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_feedbacks")
@@ -81,6 +84,8 @@ class Post(models.Model):
         #redirect to its own detail page after being created
         return reverse('post-detail', kwargs={'pk':self.pk})
 
+    def get_type(self):
+        return "post"
 
 #Organize Event
 
@@ -112,6 +117,9 @@ class Event(models.Model):
     def clean(self):
         if self.num_participant > self.max_participant:
             raise ValidationError(_('Maximum number of participants cannot be less than number of current participants!'))
+    
+    def get_type(self):
+        return "event"
 
 class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
