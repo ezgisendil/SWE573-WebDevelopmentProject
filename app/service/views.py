@@ -12,23 +12,6 @@ from django.db import IntegrityError, transaction
 from accounts.models import Profile
 from itertools import chain
 
-# Create your views here.
-# dummy data to create posts
-# posts = [
-#     {
-#         'author': 'author2',
-#         'title': 'Blog Post 1',
-#         'content': 'First post content',
-#         'date_posted': 'August 27, 2021',
-#     },
-#     {
-#         'author': 'author',
-#         'title': 'Blog Post 2',
-#         'content': 'Second post content',
-#         'date_posted': 'October 27, 2021',
-#     },
-# ]
-
 # to handle traffic create home
 def home(request):
     context = {
@@ -65,19 +48,19 @@ class HomeListView(ListView):
 
         return res
 
-    # def following_user_posts(request):
-    #     profile = Profile.objects.get(user=request.user)
-    #     users = [user for user in profile.following.all()]
-    #     following_posts = []
-    #     qs = None
-    #     for u in users:
-    #         offer = Offer.objects.filter(author=u)
-    #         post = Post.objects.filter(author=u)
-    #         event = Event.objects.filter(author=u)
-    #         following_posts.append(offer)
-    #         following_posts.append(post)
-    #         following_posts.append(event)   
-    #     return render(request, 'service/home.html', {'following_posts':following_posts})
+def following_user_posts(request):
+    profile = Profile.objects.get(user=request.user)
+    users = [user for user in profile.following.all()]
+    following_posts = []
+    qs = None
+    for u in users:
+        offer = Offer.objects.filter(author=u)
+        post = Post.objects.filter(author=u)
+        event = Event.objects.filter(author=u)
+        following_posts.append(offer)
+        following_posts.append(post)
+        following_posts.append(event)   
+    return render(request, 'service/recommendation.html', {'following_posts':following_posts})
 
 
 class SearchListView(ListView):
@@ -120,7 +103,7 @@ class SearchListView(ListView):
 
 class PostListView(ListView):
     model = Post
-    template_name = 'service/home.html'  # <app> / <model>_<viewtype>.html
+    template_name = 'service/post_list.html'  # <app> / <model>_<viewtype>.html
     context_object_name = 'posts'
     ordering = ['-date_posted']
     paginate_by = 4
@@ -145,7 +128,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['image','title', 'content','location','date']
+    fields = ['title', 'content','location','date', 'time', 'duration']
     
     def form_valid(self, form):
         form.instance.author = self.request.user #author of the form
@@ -214,8 +197,10 @@ def follow(request):
 
         if obj.user in my_profile.following.all():
             my_profile.following.remove(obj.user)
+            obj.follower.remove(my_profile.user)
         else:
             my_profile.following.add(obj.user)
+            obj.follower.add(my_profile.user)
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect('user-posts')
 
@@ -223,15 +208,24 @@ def follow(request):
 #Organize Event
 class EventListView(ListView):
     model = Event
-    template_name = 'service/home.html'  # <app> / <model>_<viewtype>.html
+    template_name = 'service/event_list.html'  # <app> / <model>_<viewtype>.html
     context_object_name = 'events'
     ordering = ['-date_posted']
     paginate_by = 4
 
     def get_queryset(self):
         username = self.kwargs.get('username')
-        res = Event.objects.filter(author__username=username).order_by('-date_posted').order_by('-date_posted').all()
+        filter = self.kwargs.get('filter')
+        res = Event.objects
 
+        if username:
+            res = res.filter(author__username=username)
+        elif filter == "waiting":
+            res = res.filter(waiting_participant=self.request.user)
+        elif filter == "current":
+            res = res.filter(current_participant=self.request.user)
+
+        res = res.order_by('-date_posted').order_by('-date_posted')
         return res
 
 class EventDetailView(DetailView):
@@ -248,7 +242,7 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    fields = ['image','title', 'content','location','date']
+    fields = ['title', 'content', 'max_participant', 'location','date', 'time', 'duration']
     #form_class = EventForm
     
     def form_valid(self, form):
@@ -365,7 +359,7 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
         kwargs['private_messages'] = Message.objects.filter(
             (Q(receiver=self.request.user) & Q(sender = other_user)) | 
             (Q(sender=self.request.user) & Q(receiver = other_user))
-        ).order_by('-date_posted').order_by('-date_posted').all()
+        ).order_by('date_posted').order_by('date_posted').all()
         
         kwargs['receiver'] = other_user
         
@@ -374,7 +368,7 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Offer
-    fields = ['title', 'content','max_participants','timecredit','location','date']
+    fields = ['title', 'content','max_participants','timecredit','location','date', 'time', 'duration']
     
     def form_valid(self, form):
         form.instance.author = self.request.user #author of the form
@@ -558,3 +552,21 @@ def event_action(request, pk, action, user_id):
             notification.save()
     
     return HttpResponseRedirect(event.get_absolute_url())
+
+class FollowingListView(ListView):
+    model = Profile
+    template_name = 'service/following.html'
+    context_object_name = 'followings'
+
+    # exclude current user
+    def get_query(self):
+        return Profile.objects.all().exclude(user=self.request.user)
+
+class FollowerListView(ListView):
+    model = Profile
+    template_name = 'service/follower.html'
+    context_object_name = 'followers'
+
+    # exclude current user
+    def get_query(self):
+        return Profile.objects.all().exclude(user=self.request.user)

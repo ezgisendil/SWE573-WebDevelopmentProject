@@ -1,0 +1,45 @@
+{% extends 'service/base.html' %}
+{% for fp in following_posts %}
+    {% if fp.author in user.profile.following.all %}
+    <h6>Recommended Offers</h6>
+        <div class="card-deck">  
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' fp.id %}">{{ fp.title }}</a></h5> 
+            <p class="card-text"><small class="text-muted">{{ fp.location }}, {{ fp.date }}, {{ fp.time }} ({{ fp.duration }} hrs)</small></p>
+            </div>
+        </div>
+        </div>
+        </br>
+    {% endif %}
+{% endfor %}
+
+{% for post in posts %}
+{% if post.author in user.profile.following.all %}
+<h6>Recommended Requests</h6>
+<div class="card-deck">  
+    <div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
+        <p class="card-text"><small class="text-muted">{{ post.location }}, {{ post.date }}, {{ post.time }} ({{ post.duration }} hrs)</small></p>
+    </div>
+    </div>
+</div>
+</br>
+{% endif %}
+{% endfor %}
+
+{% for event in events %}
+{% if event.author in user.profile.following.all %}
+<h6>Recommended Events</h6>
+<div class="card-deck">  
+    <div class="card">
+    <div class="card-body">
+        <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
+        <p class="card-text"><small class="text-muted">{{ event.location }}, {{ event.date }}, {{ event.time }} ({{ event.duration }} hrs)</small></p>
+    </div>
+    </div>
+</div>
+</br>
+{% endif %}
+{% endfor %}

@@ -11,15 +11,15 @@
           <br>
           <small>To see the offer, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
         {% elif notification.action == 'OFFER_NEW_APPLICATION' %}
-          Your offer titled "{{notification.offer.title}}" received new application.
+          <br> Your offer titled "{{notification.offer.title}}" received new application.
           <br>
           <small>To see the offer, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
         {% elif notification.action == 'OFFER_APPLICATION_ACCEPTED' %}
-          Your application to the offer titled "{{notification.offer.title}}" was accepted.
+          <br> Your application to the offer titled "{{notification.offer.title}}" was accepted.
           <br>
           <small>To see the offer, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
         {% elif notification.action == 'OFFER_APPLICATION_REJECTED' %}
-          Your application to the offer titled "{{notification.offer.title}}" was rejected.
+          <br> Your application to the offer titled "{{notification.offer.title}}" was rejected.
         {% endif %}
         <br>
         {% if notification.action == 'EVENT_NEW_FEEDBACK' %}

@@ -57,7 +57,7 @@
         </nav>
       </header>
     
-
+      
       <main role="main" class="container">
         <div class="row">
           <div class="col-md-8">
@@ -70,7 +70,7 @@
             {% endif %}
             {% block content %}{% endblock %}
           </div>
-
+          {% if user.is_authenticated %}
           <div class="col-md-4">
             <form class="form-inline" action="{% url 'search-results' %}" method="get">
               <input class="form-control mr-sm-2" type="search" id="q" name="q" placeholder="Search" aria-label="Search">
@@ -86,56 +86,15 @@
                 <a class="list-group-item list-group-item-light" href="{% url 'offer-create' %}">Offer Service</a>
                 <a class="list-group-item list-group-item-light" href="{% url 'post-create' %}">Request Service</a>
                 <a class="list-group-item list-group-item-light" href="{% url 'event-create' %}">Organize Event</a>
+                <a class="list-group-item list-group-item-light" href="{% url 'following_user_posts' %}">Recommendations</a>
             </p>
            <!-- <div class="content-section">-->
-              <br>
-              <h5>Recommendations</h5>
-              {% for offer in offers %}
-                {% if offer.author in user.profile.following.all %}
-                  <div class="card-deck">  
-                    <div class="card">
-                      <div class="card-body">
-                        <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h5> 
-                        <p class="card-text"><small class="text-muted">{{ offer.location }}, {{ offer.date }}</small></p>
-                      </div>
-                    </div>
-                  </div>
-                  </br>
-                {% endif %}
-              {% endfor %}
 
-              {% for post in posts %}
-                {% if post.author in user.profile.following.all %}
-                <div class="card-deck">  
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
-                      <p class="card-text"><small class="text-muted">{{ post.location }}, {{ post.date }}</small></p>
-                    </div>
-                  </div>
-                </div>
-                </br>
-                {% endif %}
-              {% endfor %}
-
-              {% for event in events %}
-                {% if event.author in user.profile.following.all %}
-                <div class="card-deck">  
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
-                      <p class="card-text"><small class="text-muted">{{ event.location }}, {{ event.date }}</small></p>
-                    </div>
-                  </div>
-                </div>
-                </br>
-                {% endif %}
-              {% endfor %}
               <p id="demo"></p>
           </div>
         </div>
       </main>
-    
+    {% endif %}
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

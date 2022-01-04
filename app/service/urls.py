@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import (SearchListView, FeedbackCreateView, HomeListView, NotificationListView, OfferCreateView, OfferDeleteView, OfferDetailView, OfferListView, OfferUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView,
+from .views import (following_user_posts, FollowingListView, FollowerListView, SearchListView, FeedbackCreateView, HomeListView, NotificationListView, OfferCreateView, OfferDeleteView, OfferDetailView, OfferListView, OfferUpdateView, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView,
                     EventListView, EventDetailView, EventCreateView, EventUpdateView, EventDeleteView, MessageListView, MessageCreateView, AdvancedSearchView, UserPostListViewFixed, follow)
 from . import views
 
@@ -17,8 +17,9 @@ urlpatterns = [
 
     path('event/<int:pk>/', EventDetailView.as_view(), name = 'event-detail'),
     path('event/list/', EventListView.as_view(), name = 'event-list'),
-    path('event/new/', EventCreateView.as_view(), name = 'event-create'),  
+    path('event/list/my/<str:filter>/', EventListView.as_view(), name = 'applied-event-list'),
     path('event/list/<str:username>/', EventListView.as_view(), name = 'event-list-user'),
+    path('event/new/', EventCreateView.as_view(), name = 'event-create'),  
     path('event/<int:pk>/update/', EventUpdateView.as_view(), name = 'event-update'),
     path('event/<int:pk>/delete/', EventDeleteView.as_view(), name = 'event-delete'),
     path('event/<int:pk>/apply/', views.apply_event, name = 'event-apply'),
@@ -43,4 +44,7 @@ urlpatterns = [
     path('message/<str:username>/', MessageCreateView.as_view(), name = 'message-detail'),
 
     path('follow', follow, name='follow'),
+    path('following/', FollowingListView.as_view(template_name='service/following.html'), name='followings'),
+    path('follower/', FollowerListView.as_view(template_name='service/follower.html'), name='followers'),
+    path('recommendation/', following_user_posts, name='following_user_posts' )
 ]

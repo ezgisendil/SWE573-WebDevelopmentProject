@@ -3,34 +3,30 @@
 
 {% block content %}
     <div class="content-section">
+      <br>
         <div class="media">
         <img class="rounded-circle account-img" src="{{ author.profile.image.url }}">
         <div class="media-body">
-        </br><h3 class="account-heading">{{ author.username }}</h3>
-<!--             <p class="text-secondary">Contact: {{ author.email }}</p> -->
-          <p class="text-secondary">{{ author.profile.location }}</p>
+        <h6 class="account-heading small">{{ author.username }}</h6>
+        <p class="text-secondary">{{ author.profile.location }} &ensp; Contact: {{ author.email }}  </p>
+
 
           {% if follow %}
             <form action="{% url 'follow' %}" method="POST">
               {% csrf_token %}
               <input type="hidden" name="profile_user" value={{author.pk}}>
-              <button type="submit" class="btn btn-outline-secondary btn-sm">Unfollow</button>
+              <button type="submit" class="btn btn-outline-secondary btn-sm"> Unfollow</button>
             </form>
           {% else %}
           <form action="{% url 'follow' %}" method="POST">
             {% csrf_token %}
             <input type="hidden" name="profile_user" value={{author.pk}}>
-            <button type="submit" class="btn btn-outline-secondary btn-sm">Follow</button>
+            <button type="submit" class="btn btn-outline-info btn-sm">Follow</button>
           </form>
           {% endif %}
-
-
-          <a class="" href="{% url 'message-detail' author.username %}">Send Private Message</a>
-<!--             <p class="text-secondary">following and followers </p>   --> 
-            
         </div>
-        
-        </div>
+        <a class="btn btn-outline-info btn-sm" href="{% url 'message-detail' author.username %}">&ensp;Send Message </a>   
+      </div>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
@@ -39,8 +35,6 @@
                 <legend class="border-bottom mb-4">Interests</legend>
                 <p class="text-secondary">{{author.profile.interests}}</p>
                 <br>
-                {{follow}}
-
             </fieldset>
         <div class="form-group">
         </div>
@@ -52,33 +46,19 @@
       {% for offer in offers %}
       <article class="media content-section">
         <div class="media-body">
-          <div class="article-metadata">
-            <small class="text-muted">{{ offer.date_posted | date:"F d, Y"}}</small>
-          </div>
-          <h3><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h3>
+          <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h5> 
+          <p class="card-text"><small class="text-muted">{{ offer.location }}, {{ offer.date }}, {{ offer.time }} ({{ offer.duration }} hrs)</small></p>
           <p class="article-content">{{ offer.content }}</p>
-          <!-- <div class="text-secondary">
-            <button class="btn btn-secondary btn-sm btn-lg" href="#">Apply</button>
-          </div> -->
         </div>
       </article>
       {% endfor %}    
 
       {% for post in posts %}
-         <!-- <h1>{{ post.title }}</h1> 
-          <p> By {{ author }} on {{ post.date_posted }}</p> 
-          <p> {{ post.content }}</p>>-->
-          
         <article class="media content-section">
           <div class="media-body">
-            <div class="article-metadata">
-              <small class="text-muted">{{ post.date_posted | date:"F d, Y"}}</small>
-            </div>
-            <h3><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h3>
+            <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
+            <p class="card-text"><small class="text-muted">{{ post.location }}, {{ post.date }}, {{ post.time }} ({{ post.duration }} hrs)</small></p>
             <p class="article-content">{{ post.content }}</p>
-            <!-- <div class="text-secondary">
-              <button class="btn btn-secondary btn-sm btn-lg" href="#">Apply</button>
-            </div> -->
           </div>
         </article>
       {% endfor %}
@@ -86,14 +66,9 @@
       {% for event in events %}
         <article class="media content-section">
           <div class="media-body">
-            <div class="article-metadata">
-              <small class="text-muted">{{ event.date_posted | date:"F d, Y"}}</small>
-            </div>
-            <h3><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h3>
+            <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
+            <p class="card-text"><small class="text-muted">{{ event.location }}, {{ event.date }}, {{ event.time }} ({{ event.duration }} hrs)</small></p>
             <p class="article-content">{{ event.content }}</p>
-<!--             <div class="text-secondary">
-              <button class="btn btn-secondary btn-sm btn-lg" href="#">Join</button>
-            </div> -->
           </div>
         </article>
       {% endfor %}
@@ -122,6 +97,5 @@
       {% endif %}      
 {% endblock content %}
 
-   <!-- Offers, Requests and Events will be added here.-->
 
 
