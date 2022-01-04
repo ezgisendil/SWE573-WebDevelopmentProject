@@ -14,6 +14,7 @@ class Profile(models.Model):
     location = models.CharField(null=True, max_length=100, verbose_name='location')
     occupation = models.CharField(null=True, max_length=100, verbose_name='occupation')
     following = models.ManyToManyField(User, related_name='following', blank=True)
+    follower = models.ManyToManyField(User, related_name='follower', blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

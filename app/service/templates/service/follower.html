@@ -1,0 +1,15 @@
+{% extends 'service/base.html' %}
+
+
+{% block content %} 
+Followers
+{% for profile in user.profile.follower.all %}
+
+    <article class="media content-section"> 
+        <!-- <img class="rounded-circle article-img" src="{{ profile.user.avatar.url }}" width="50" height="50">        -->
+            <p>{{ profile }}</p>   
+    </article> 
+
+{% endfor %}
+
+{% endblock %}
