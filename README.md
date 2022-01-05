@@ -26,3 +26,10 @@ python manage.py migrate
 
 python manage.py runserver
 ```
+## How to run on Docker
+
+```
+git clone https://github.com/ezgisl/SWE573-WebDevelopmentProject.git
+
+docker-compose up --build
+```
