@@ -6,7 +6,8 @@
     {% if item.get_type == "offer" %}
       <div class="card-deck">
         <div class="card">
-          <div class="card-body">
+          <div class="row card-body">
+            <div class="col-sm-9"> 
             <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' item.id %}">{{ item.title }}</a></h5> 
             <p class="card-text"><small class="text-muted">Location: {{ item.location }} &emsp; Date: {{ item.date }} &emsp; Time: {{ item.time }} ({{ item.duration }} hrs)</small></p>
             <p class="card-text">{{ item.content }}</p>
@@ -18,31 +19,32 @@
             {% elif user.is_authenticated and user in item.current_participants.all %}
             <p class="article-content" style="color: green"><small>You have already enrolled for this service. The offerer will be paid by timecredits after you and the offerer submit the feedback.</small></p>
               {% if user.username not in item.feedback_senders %}
-              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'feedback-create' item.id item.author.username %}" type="submit">Submit Feedback</a>
+              <!-- <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'feedback-create' item.id item.author.username %}" type="submit">Submit Feedback</a> -->
               {% else %}
               You have already submitted a feedback for this service. 
               {% endif %}
             {% elif user.is_authenticated and user in item.finished_participants.all %}
-            <p class="article-content" style="color: green">You already used this service and the service is now completed.</p>
+            <p class="article-content" style="color: green"><small>You already used this service and the service is now completed.</small></p>
             {% elif user.is_authenticated and user.profile.timecredit < item.timecredit %}
-            <p class="article-content" style="color: red">You need at least {{item.timecredit}} timecredit, but you have {{user.profile.timecredit}} timecredit available.</p>
+            <p class="article-content" style="color: red"><small>You need at least {{item.timecredit}} timecredit, but you have {{user.profile.timecredit}} timecredit available.</small></p>
             {% elif user.is_authenticated and item.num_participants >= item.max_participants %}
-            <p class="article-content" style="color: red">This offer has already reached its limit and does not accept new applications.</p>
+            <p class="article-content" style="color: red"><small>This offer has already reached its limit and does not accept new applications.</small></p>
             {% elif user.is_authenticated %}
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-apply' item.id %}" type="submit">Apply</a>
             {% else %}
             <p class="article-content" style="color: red">You need to login to apply for a service.</p>
             {% endif %}
           </div>
+          <img class="col-sm-3" src="{{ item.image.url }}" width="70" height="100"> 
+          </div>
         </div>
       </div>
-
       </br>
     {% elif item.get_type == "post" %}
       <div class="card-deck">
         <div class="card">
-      <!--     <img class="card-img-top" src="{{ item.image.url }}" alt="image"> -->
-          <div class="card-body">
+          <div class="row card-body">
+            <div class="col-sm-9"> 
             <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' item.id %}">{{ item.title }}</a></h5> 
             <p class="card-text"><small class="text-muted">Location: {{ item.location }} &emsp; Date: {{ item.date }} &emsp; Time: {{ item.time }} ({{ item.duration }} hrs)</small></p>
             <p class="card-text">{{ item.content }}</p>
@@ -51,14 +53,16 @@
             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' item.id %}" type="submit">Delete Request</a>
             {% endif %}
           </div>
+         <img class="col-sm-3" src="{{ item.image.url }}" width="70" height="100"> 
+        </div>
         </div>
       </div>
       </br>
     {% elif item.get_type == "event" %}
       <div class="card-deck">
-        <div class="card">
-      <!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
-          <div class="card-body">
+        <div class="card">     
+            <div class="row card-body">
+            <div class="col-sm-9"> 
             <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' item.id %}">{{ item.title }}</a></h5> 
             <p class="card-text"><small class="text-muted">Location: {{ item.location }} &emsp; Date: {{ item.date }} &emsp; Time: {{ item.time }} ({{ item.duration }} hrs)</small></p>
             <p class="card-text">{{ item.content }}</p>
@@ -70,12 +74,14 @@
             {% elif user.is_authenticated and user in item.current_participant.all %}
             <p class="article-content" style="color: green"><small>You have already enrolled for this event.</small></p>
             {% elif user.is_authenticated and item.num_participant >= item.max_participant %}
-            <p class="article-content" style="color: red">This event has already reached its limit and does not accept new applications.</p>
+            <p class="article-content" style="color: red"><small>This event has already reached its limit and does not accept new applications.</small></p>
             {% elif user.is_authenticated %}
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-apply' item.id %}" type="submit">Apply</a>
             {% else %}
-            <p class="article-content" style="color: red">You need to login to apply for an event.</p>
+            <p class="article-content" style="color: red"><small>You need to login to apply for an event.</small></p>
             {% endif %}
+            </div>
+            <img class="col-sm-3" src="{{ item.image.url }}" width="70" height="100"> 
           </div>
         </div>
       </div>

@@ -48,6 +48,7 @@ class HomeListView(ListView):
 
         return res
 
+# for recommendation section
 def following_user_posts(request):
     profile = Profile.objects.get(user=request.user)
     users = [user for user in profile.following.all()]
@@ -128,7 +129,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content','location','date', 'time', 'duration']
+    form_class = PostForm
     
     def form_valid(self, form):
         form.instance.author = self.request.user #author of the form
@@ -242,8 +243,8 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    fields = ['title', 'content', 'max_participant', 'location','date', 'time', 'duration']
-    #form_class = EventForm
+    #fields = ['image', 'title', 'content', 'max_participant', 'location','date', 'time', 'duration']
+    form_class = EventForm
     
     def form_valid(self, form):
         form.instance.author = self.request.user #author of the form
@@ -368,8 +369,8 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Offer
-    fields = ['title', 'content','max_participants','timecredit','location','date', 'time', 'duration']
-    
+    #fields = ['image', 'title', 'content','max_participants','timecredit','location','date', 'time', 'duration']
+    form_class = OfferForm
     def form_valid(self, form):
         form.instance.author = self.request.user #author of the form
         return super().form_valid(form)  #validate the form
@@ -543,9 +544,6 @@ def event_action(request, pk, action, user_id):
             event.num_participant -= 1
             event.save()
             
-            user.profile.timecredit += event.timecredit
-            user.profile.timecredit_hold -= event.timecredit
-
             user.profile.save()
 
             notification = Notification(user=user, event=event, action="EVENT_APPLICATION_REJECTED")

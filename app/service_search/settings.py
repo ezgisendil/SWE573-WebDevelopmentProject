@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'service',
     'accounts',
     'crispy_forms',
+    # 'location_field.apps.DefaultConfig',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +71,19 @@ TEMPLATES = [
     },
 ]
 
+# LOCATION_FIELD = {
+#     'map.provider': 'openstreetmap',
+#     'search.provider': 'nominatim',
+#     'map.zoom': 13,
+#     'search.suffix': '',
+ 
+#     'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
+#     'provider.google.api_key': 'AIzaSy',
+#     'provider.google.api_libraries': '',
+#     'provider.google.map.type': 'ROADMAP',
+# }
+
+
 WSGI_APPLICATION = 'service_search.wsgi.application'
 
 
@@ -80,7 +94,8 @@ WSGI_APPLICATION = 'service_search.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbservice',
+        'NAME': 'dbpost',
+        # 'NAME': 'dbservice',
         # 'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASS'),

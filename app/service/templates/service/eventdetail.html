@@ -1,24 +1,21 @@
-{% extends 'service/base.html' %}
-
-{% block content %}
 
 <article class="media content-section">
     <div class="media-body">
-        <h2 class="article-title">{{ object.title }}</h2>
-        <p class="article-content"> <small class="text-muted">Location: {{ object.location }} &emsp; Date: {{ object.date }} &emsp; Time: {{ object.time }} ({{ object.duration }} hrs)</small></p> 
-        <p class="article-content"><small class="text-muted">Current Participants: {{ object.num_participant }} / {{ object.max_participant }}</small></p>
-        <p class="article-content">{{ object.content }}</p>        
-        {% if object.author == user %}
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.id %}" type="submit">Update Event</a>
-        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' object.id %}" type="submit">Delete Event</a>
-        {% elif user.is_authenticated and user in object.waiting_participant.all %}
+        <h2 class="article-title">{{ event.title }}</h2>
+        <p class="article-content"> <small class="text-muted">Location: {{ event.location }} &emsp; Date: {{ event.date }} &emsp; Time: {{ event.time }} ({{ event.duration }} hrs)</small></p> 
+        <p class="article-content"><small class="text-muted">Current Participants: {{ event.num_participant }} / {{ event.max_participant }}</small></p>
+        <p class="article-content">{{ event.content }}</p>        
+        {% if event.author == user %}
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' event.id %}" type="submit">Update Event</a>
+        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' event.id %}" type="submit">Delete Event</a>
+        {% elif user.is_authenticated and user in event.waiting_participant.all %}
         <p class="article-content" style="color: green"><small>You have already applied for this event and your application is waiting.</small> </p>
-        {% elif user.is_authenticated and user in object.current_participant.all %}
+        {% elif user.is_authenticated and user in event.current_participant.all %}
         <p class="article-content" style="color: green"><small>You have already enrolled for this event.</small></p>
-        {% elif user.is_authenticated and object.num_participant >= object.max_participant %}
+        {% elif user.is_authenticated and event.num_participant >= event.max_participant %}
         <p class="article-content" style="color: red"><small>This event has already reached its limit and does not accept new applications.</small></p>
         {% elif user.is_authenticated %}
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-apply' object.id %}" type="submit">Apply</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-apply' event.id %}" type="submit">Apply</a>
         {% else %}
         <p class="article-content" style="color: red"><small>You need to login to apply for an event.</small> </p>
         {% endif %}
@@ -67,4 +64,3 @@
     </div>
 </article>
 
-{% endblock content %}

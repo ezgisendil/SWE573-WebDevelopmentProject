@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.db.models.fields import PositiveIntegerField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.core.exceptions import ValidationError
+from PIL import Image
+# from location_field.models.plain import PlainLocationField
 
 # Create your models here.
 
@@ -19,6 +21,7 @@ class Offer(models.Model):
     duration = PositiveIntegerField(null=True)
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(default='defaultservice.jpg', upload_to='post_pics')
 
     max_participants = models.PositiveIntegerField(default=3, validators=[MinValueValidator(1)])
     timecredit = models.PositiveIntegerField(default=1)
@@ -69,11 +72,13 @@ class Feedback(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=100, verbose_name='title')
     content = models.TextField(verbose_name='content')
+    # city = models.CharField(max_length=255)
+    # location = PlainLocationField(based_fields=['city'], zoom=7)
     location = models.CharField(max_length=100, verbose_name='location')
     date = models.DateField(default='20/12/2021')
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='defaultpost.jpg', upload_to='post_pics')
+    image = models.ImageField(default='defaultservice.jpg', upload_to='post_pics')
     time = TimeField(null=True)
     duration = PositiveIntegerField(null=True)
 
@@ -88,7 +93,6 @@ class Post(models.Model):
         return "post"
 
 #Organize Event
-
 class Event(models.Model):
     title = models.CharField(max_length=100, verbose_name='title')
     content = models.TextField(verbose_name='content')
@@ -96,7 +100,7 @@ class Event(models.Model):
     date = models.DateField(default='20/12/2021')
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='defaultpost.jpg', upload_to='post_pics')
+    image = models.ImageField(default='defaultservice.jpg', upload_to='post_pics')
     time = TimeField(null=True)
     duration = PositiveIntegerField(null=True)
 

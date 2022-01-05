@@ -20,6 +20,8 @@
           <small>To see the offer, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
         {% elif notification.action == 'OFFER_APPLICATION_REJECTED' %}
           <br> Your application to the offer titled "{{notification.offer.title}}" was rejected.
+          <br>
+          <small>To see the event, Click <a href="{{notification.offer.get_absolute_url}}">here</a>.</small>
         {% endif %}
         <br>
         {% if notification.action == 'EVENT_NEW_FEEDBACK' %}

@@ -6,12 +6,10 @@
 {% for offer in offers %}
 <div class="card-deck">
   <div class="card">
-    <!-- <img class="card-img-top" src="{{ offer.image.url }}" alt="image"> -->
-    <div class="card-body">
+    <div class="row card-body">
+      <div class="col-sm-9"> 
       <h5 class="card-title"><a class="article-title" href="{% url 'offer-detail' offer.id %}">{{ offer.title }}</a></h5> 
       <p class="card-text"><small class="text-muted">Location: {{ offer.location }} &emsp; Date: {{ offer.date }} &emsp; Time: {{ offer.time }} ({{ offer.duration }} hrs)</small></p>
-      <!-- <span id="dots">...</span><span id="more"></span>
-      <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ offer.content }}</p>
       {% if offer.author == user %}
       <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-update' offer.id %}" type="submit">Update Offer</a>
@@ -19,12 +17,25 @@
       {% elif user.is_authenticated and user in offer.waiting_participants.all %}
       <p class="article-content" style="color: green"><small>You have already applied for this service and your application is waiting.</small> </p>
       {% elif user.is_authenticated and user in offer.current_participants.all %}
-      <p class="article-content" style="color: green"><small>You have already enrolled for this service. The author will be paid by timecredits after you and the offerer submit the feedback.</small></p>
+      <p class="article-content" style="color: green"><small>You have already enrolled for this service. The offerer will be paid by timecredits after you and the offerer submit the feedback.</small></p>
+        {% if user.username not in offer.feedback_senders %}
+        <!-- <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'feedback-create' item.id item.author.username %}" type="submit">Submit Feedback</a> -->
+        {% else %}
+        You have already submitted a feedback for this service. 
+        {% endif %}
+      {% elif user.is_authenticated and user in offer.finished_participants.all %}
+      <p class="article-content" style="color: green"><small>You already used this service and the service is now completed.</small></p>
+      {% elif user.is_authenticated and user.profile.timecredit < offer.timecredit %}
+      <p class="article-content" style="color: red"><small>You need at least {{offer.timecredit}} timecredit, but you have {{user.profile.timecredit}} timecredit available.</small></p>
+      {% elif user.is_authenticated and offer.num_participants >= offer.max_participants %}
+      <p class="article-content" style="color: red"><small>This offer has already reached its limit and does not accept new applications.</small></p>
       {% elif user.is_authenticated %}
       <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'offer-apply' offer.id %}" type="submit">Apply</a>
       {% else %}
       <p class="article-content" style="color: red">You need to login to apply for a service.</p>
       {% endif %}
+    </div>
+    <img class="col-sm-3" src="{{ offer.image.url }}" width="70" height="100"> 
     </div>
   </div>
 </div>
@@ -37,8 +48,8 @@
 
 <div class="card-deck">
   <div class="card">
-<!--     <img class="card-img-top" src="{{ post.image.url }}" alt="Card image cap"> -->
-    <div class="card-body">
+    <div class="row card-body">
+      <div class="col-sm-9"> 
       <h5 class="card-title"><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h5> 
       <p class="card-text"><small class="text-muted">Location: {{ post.location }} &emsp; Date: {{ post.date }} &emsp; Time: {{ post.time }} ({{ post.duration }} hrs)</small></p>
       <p class="card-text">{{ post.content }}</p>
@@ -47,22 +58,22 @@
       <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' post.id %}" type="submit">Delete Request</a>
       {% endif %}
     </div>
+   <img class="col-sm-3" src="{{ post.image.url }}" width="70" height="100"> 
+  </div>
   </div>
 </div>
 </br>
 {% empty %}
-<p class="article-content" style="color: darkred; font-size:small">There are no posts for this search query right now.</p>
+<p class="article-content" style="color: darkred; font-size:small">There are no requests for this search query right now.</p>
 {% endfor %}
 
 {% for event in events %}
 <div class="card-deck">
-  <div class="card">
-<!--     <img class="card-img-top" src="{{ post.image.url }}" alt="image"> -->
-    <div class="card-body">
+  <div class="card">     
+      <div class="row card-body">
+      <div class="col-sm-9"> 
       <h5 class="card-title"><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.title }}</a></h5> 
       <p class="card-text"><small class="text-muted">Location: {{ event.location }} &emsp; Date: {{ event.date }} &emsp; Time: {{ event.time }} ({{ event.duration }} hrs)</small></p>
-      <!-- <span id="dots">...</span><span id="more"></span>
-      <button onclick="myFunction()" id="myBtn">...</button> -->
       <p class="card-text">{{ event.content }}</p>
       {% if event.author == user %}
       <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' event.id %}" type="submit">Update Event</a>
@@ -71,11 +82,15 @@
       <p class="article-content" style="color: green"><small>You have already applied for this event and your application is waiting.</small> </p>
       {% elif user.is_authenticated and user in event.current_participant.all %}
       <p class="article-content" style="color: green"><small>You have already enrolled for this event.</small></p>
+      {% elif user.is_authenticated and event.num_participant >= event.max_participant %}
+      <p class="article-content" style="color: red"><small>This event has already reached its limit and does not accept new applications.</small></p>
       {% elif user.is_authenticated %}
       <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-apply' event.id %}" type="submit">Apply</a>
       {% else %}
-      <p class="article-content" style="color: red">You need to login to apply for an event.</p>
+      <p class="article-content" style="color: red"><small>You need to login to apply for an event.</small></p>
       {% endif %}
+      </div>
+      <img class="col-sm-3" src="{{ event.image.url }}" width="70" height="100"> 
     </div>
   </div>
 </div>
@@ -108,39 +123,3 @@
 {% endif %}
 {% endblock content %}
 
-
-<!--
-{% block request %}
-{% for request in requests %}
-  <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ request.author.profile.image.url }}">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="#">{{ request.author }}</a>
-        <small class="text-muted">{{ request.date_posted | date:"F d, Y"}}</small>
-        
-      </div>
-      <h2><a class="article-title" href="{% url 'request-detail' post.id %}">{{ request.title }}</a></h2>
-      <p class="article-content">{{ request.content }}</p>
-    </div>
-  </article>
-{% endfor %}
-{% endblock request %}
-
-{% block event %}
-{% for event in events %}
-  <article class="media content-section">
-    <img class="rounded-circle article-img" src="{{ event.author.profile.image.url }}">
-    <div class="media-body">
-      <div class="article-metadata">
-        <a class="mr-2" href="#">{{ event.author }}</a>
-        <small class="text-muted">{{ event.date_posted | date:"F d, Y"}}</small>
-        
-      </div>
-      <h2><a class="article-title" href="{% url 'event-detail' post.id %}">{{ event.title }}</a></h2>
-      <p class="article-content">{{ event.content }}</p>
-    </div>
-  </article>
-{% endfor %}
-{% endblock event %}
--->

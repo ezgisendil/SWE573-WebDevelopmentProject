@@ -2,6 +2,7 @@ from django import forms
 from django.forms.widgets import HiddenInput
 from .models import Post, Offer, Message, Event, Feedback
 import datetime
+#from location_field.forms.plain import PlainLocationField
 
 
 #for offer, request and event creation form - date-time widgets
@@ -9,6 +10,8 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 class PostForm(forms.ModelForm):
+    # city = forms.CharField()
+    # location = PlainLocationField(based_fields=['city'], initial='41.2876834,29.1607606')
     sehirler=["Online", "Adana", "Adıyaman", "Afyon", "Ağrı", "Amasya", "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "İçel (Mersin)", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri", "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak", "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce"]
     location = forms.ChoiceField(label='Location', choices=((i, i) for i in sehirler))
 
@@ -17,7 +20,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'content','location','date', 'time', 'duration']
+        fields = ['image', 'title', 'content','location','date', 'time', 'duration']
         widgets = {
             'date': DateInput()
         }
@@ -31,7 +34,7 @@ class EventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ['title', 'content', 'max_participant', 'location','date', 'time', 'duration']
+        fields = ['image', 'title', 'content', 'max_participant', 'location','date', 'time', 'duration']
         widgets = {
             'date': DateInput(),
         }
@@ -48,7 +51,7 @@ class OfferForm(forms.ModelForm):
 
     class Meta:
         model = Offer
-        fields = ['title', 'content','max_participants','timecredit','location','date', 'time', 'duration']
+        fields = ['image', 'title', 'content','max_participants','timecredit','location','date', 'time', 'duration']
         widgets = {
             'date': DateInput()
         }
