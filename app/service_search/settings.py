@@ -91,27 +91,27 @@ WSGI_APPLICATION = 'service_search.wsgi.application'
 #https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbpost',
-        # 'NAME': 'dbservice',
-        # 'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
-        'HOST': 'localhost',
-    }
-}  
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': os.environ.get('SQL_ENGINE'),
-#         'NAME': os.environ.get('SQL_DATABASE'),
-#         'USER': os.environ.get('SQL_USER'),
-#         'PASSWORD': os.environ.get('SQL_PASSWORD'),
-#         'HOST': os.environ.get('SQL_HOST'),
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'dbpost',
+#         # 'NAME': 'dbservice',
+#         # 'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASS'),
+#         'HOST': 'localhost',
 #     }
-# }   
+# }  
+
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get('SQL_ENGINE'),
+        'NAME': os.environ.get('SQL_DATABASE'),
+        'USER': os.environ.get('SQL_USER'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD'),
+        'HOST': os.environ.get('SQL_HOST'),
+    }
+}   
 
 
 # Password validation
