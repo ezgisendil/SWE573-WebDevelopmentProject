@@ -58,7 +58,7 @@ class Offer(models.Model):
 class Feedback(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_feedbacks")
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_feedbacks")
-    offer = models.ForeignKey(Offer, on_delete=models.DO_NOTHING, related_name="feedbacks")
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="feedbacks")
     content = models.TextField(verbose_name='content')
     rating = models.PositiveSmallIntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)])
     date_posted = models.DateTimeField(default=timezone.now)
@@ -137,8 +137,8 @@ class Message(models.Model):
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    offer = models.ForeignKey(Offer, null=True, on_delete=models.DO_NOTHING)
-    event = models.ForeignKey(Event, null=True, on_delete=models.DO_NOTHING)
+    offer = models.ForeignKey(Offer, null=True, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, null=True, on_delete=models.CASCADE)
     action = models.CharField(max_length=100, verbose_name='action')
     date_posted = models.DateTimeField(default=timezone.now)
 

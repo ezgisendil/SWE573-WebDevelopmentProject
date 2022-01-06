@@ -166,8 +166,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = 'service-home'
 
-#authenticated olanlar da profile page'e?
-#authenticated olmayan userlar profile goruntulemeye calistiginda login page'e yonlendirilecek
 LOGIN_URL = 'login'
 
 STATICFILES_DIRS = [
